@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{ entry }} ({{ entry.book }})</title>
+		<style>
+			img {
+				max-width: 400px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<h1>{{ entry }}</h1>
+
+		{% for photo in entry.photo_set.all %}
+		<img src="{{photo.image.url}}" />
+		{% endfor %}
+
+		<p>{{ entry.description }}</p>
+
+		<a href="../../">Back to Book: {{ entry.book }}</a>
+	</body>
+</html>
