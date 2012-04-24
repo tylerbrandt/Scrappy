@@ -1,5 +1,9 @@
-from scrapbook.models import Entry, Checkin, Photo
+from scrapbook.models import Book, Entry, Checkin, Photo
 from django.contrib import admin
+
+admin.site.register(Book)
+admin.site.register(Checkin)
+admin.site.register(Photo)
 
 class PhotoInline(admin.StackedInline):
 	model = Photo
