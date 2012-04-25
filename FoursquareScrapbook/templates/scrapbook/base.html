@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Foursquare Scrapbook - {% block title %}Home{% endblock %}</title>
+		<link rel="stylesheet" type="text/css" href="/media/style.css" />
+	</head>
+	<body>
+		<header>
+		 	<h1>Foursquare Scrapbook</h1>
+		 	<nav>
+		 	 	<ul>
+		 	 		<li><a href="/">Home</a></li>
+		 	 		{% block additional_navlinks %}
+		 	 		{% endblock %}
+		 	 	</ul>
+			</nav>
+		</header>
+		<div id="content">
+			{% block content %}
+			Placeholder
+			{% endblock %}
+		</div>
+	</body>
+</html>
+		
+		

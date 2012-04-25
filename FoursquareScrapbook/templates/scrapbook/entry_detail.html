@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>{{ entry }} ({{ entry.book }})</title>
-		<style>
-			img {
-				max-width: 400px;
-			}
-		</style>
-	</head>
-	<body>
+{% extends "scrapbook/base.html" %}
 
+{% block title %}{{ entry }} ({{ entry.book }}){% endblock %}
+
+{% block content %}
+		<article>
 		<h1>{{ entry }}</h1>
 
 		{% for photo in entry.photo_set.all %}
@@ -17,7 +11,6 @@
 		{% endfor %}
 
 		<p>{{ entry.description }}</p>
-
+		</article>
 		<a href="../../">Back to Book: {{ entry.book }}</a>
-	</body>
-</html>
+{% endblock content %}

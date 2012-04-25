@@ -1,10 +1,16 @@
+{% extends "scrapbook/base.html" %}
+
+{% block title %}{{ book }}{% endblock %}
+
+{% block content %}
 <h1>{{ book }}</h1>
 
 <img src="{{ book.image.url }}" />
 
 <h2>Entries</h2>
-<ul>
 {% for entry in book.entry_set.all %}
-<li><a href="entries/{{ entry.id }}/">{{ entry }}</a></li>
+<article>
+	<a href="entries/{{ entry.id }}/">{{ entry }}</a>
+</article>
 {% endfor %}
-</ul>
+{% endblock content %}
