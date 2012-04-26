@@ -31,14 +31,14 @@ class Entry(models.Model):
 class Checkin(models.Model):
 	"""Model for Foursquare Checkins"""
 	# Checkin id
-	checkin_id = models.CharField(max_length=200)
+	checkin_id = models.CharField(max_length=200, primary_key=True)
 	# Datetime when checkin occurred
 	created_at = models.DateTimeField(default=timezone.now)
 	# Venue Name
 	venue_name = models.CharField(max_length=200)
 
 	def __unicode__(self):
-		return self.checkin_id
+		return self.venue_name + " @ " + str(self.created_at)
 
 class Photo(models.Model):
 	"""Model for user-uploaded Entry photos"""
