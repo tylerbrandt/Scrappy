@@ -1,0 +1,17 @@
+{% extends "scrapbook/base.html" %}
+
+{% block title %}Your Checkins{% endblock %}
+
+{% block content %}
+<h1>Your Imported Checkins</h1>
+{% if not object_list %}
+	<p>No checkins</p>
+{% else %}
+	{% for checkin in object_list %}
+	<article>
+		<a href="{{ checkin.checkin_id }}">{{ checkin.venue_name }} @ {{ checkin.created_at }}</a>
+	</article>
+	{% endfor %}
+{% endif %}
+<a href="import/">Import Checkins Now</a>
+{% endblock content %}

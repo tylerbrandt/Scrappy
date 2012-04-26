@@ -1,0 +1,58 @@
+{% extends "scrapbook/base.html" %}
+
+{% block title %}Import Checkins{% endblock %}
+
+{% block content %}
+<form action="../import_selected/" method="POST" id="import_checkins">
+{% csrf_token %}
+<input type="submit" value="Import Selected Checkins" />
+<table class="checkins_list">
+	<tr>
+		<th>Import?</th>
+		<th>ID</th>
+		<th>Venue Name</th>
+		<th>Timestamp</th>
+	</tr>
+{% for checkin in checkins %}
+	<tr class="checkin">
+		<td>
+			{% if checkin.imported %}
+			<input type="checkbox" disabled="disabled" />
+			{% else %}
+			<input type="checkbox" name="checkin_{{ checkin.id }}" />
+			{% endif %}
+		</td>
+		<td class="checkin_id">{{ checkin.id }}</td>
+		<td class="checkin_venue">{{ checkin.venue.name }}</td>
+		<td class="checkin_timestamp">{{ checkin.createdAt }}</td>
+	</tr>
+{% endfor %}
+</table>
+<input name="checkin_data" type="hidden" />
+</form>
+<div id="debuginfo">
+Auth Code: {{ code }}<p/>
+Token Response: {{ token_response }}<p/>
+Token: {{ token }}<p/>
+Raw data: {{ raw }}<p/>
+</div>
+
+<script>
+$(document).ready(function() {
+	$("#import_checkins").submit(function() {
+		var selected = [], id, name, time, selectedStr;
+		$(".checkin").each(function() {
+			if($("input[type=checkbox]",this).is(":checked")) {
+				id = $(".checkin_id",this).text();
+				name = $(".checkin_venue",this).text();
+				time = $(".checkin_timestamp",this).text();
+				selected.push({ id: id, venue: name, time: time });
+			}
+		});
+		selectedStr = JSON.stringify(selected);
+		$("input[name=checkin_data]").val(selectedStr);
+		return true;
+	});
+});
+</script>
+{% endblock content %}

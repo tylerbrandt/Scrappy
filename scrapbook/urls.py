@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from django.views.generic import ListView, DetailView
-from scrapbook.models import Book, Entry
+from scrapbook.models import Book, Entry, Checkin
 
 urlpatterns = patterns('',
 	# list view
@@ -23,4 +23,19 @@ urlpatterns = patterns('',
 			model=Entry,
 			template_name='scrapbook/entry_detail.html')
 	),
+	
+	url(r'^checkins/$',
+		ListView.as_view(
+			queryset=Checkin.objects.all,
+			template_name='scrapbook/checkins.html')
+	),
+	
+	# import foursquare stuff
+	url(r'checkins/import/$','scrapbook.views.checkins_import'),
+	
+	# import response
+	url(r'checkins/import_response/$','scrapbook.views.checkins_response'),
+	
+	# import selected checkins
+	url(r'checkins/import_selected/$','scrapbook.views.checkins_save'),
 )
