@@ -3,13 +3,15 @@
 	<head>
 		<title>Foursquare Scrapbook - {% block title %}Home{% endblock %}</title>
 		<link rel="stylesheet" type="text/css" href="/media/style.css" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	</head>
 	<body>
 		<header>
 		 	<h1>Foursquare Scrapbook</h1>
 		 	<nav>
 		 	 	<ul>
-		 	 		<li><a href="/">Home</a></li>
+		 	 		<li><a href="/scrapbook/">Home</a></li>
+		 	 		<li><a href="/scrapbook/checkins/">Checkins</a></li>
 		 	 		{% block additional_navlinks %}
 		 	 		{% endblock %}
 		 	 	</ul>
