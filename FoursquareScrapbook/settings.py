@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     'south',
     # My app
     'scrapbook',
+    'accounts',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -161,3 +162,6 @@ LOGGING = {
         },
     }
 }
+
+LOGIN_REDIRECT_URL="/scrapbook/"
+AUTH_PROFILE_MODULE="accounts.UserProfile"

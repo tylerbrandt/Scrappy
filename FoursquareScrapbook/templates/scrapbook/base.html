@@ -4,20 +4,34 @@
 		<title>Foursquare Scrapbook - {% block title %}Home{% endblock %}</title>
 		<link rel="stylesheet" type="text/css" href="/media/style.css" />
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		{% block scripts %}
+		{% endblock %}
 	</head>
 	<body>
+		<div class="error">{{ error }}</div>
 		<header>
 		 	<h1>Foursquare Scrapbook</h1>
 		 	<nav>
 		 	 	<ul>
-		 	 		<li><a href="/scrapbook/">Home</a></li>
+		 	 		<li><a href="/scrapbook/">Books</a></li>
 		 	 		<li><a href="/scrapbook/checkins/">Checkins</a></li>
 		 	 		{% block additional_navlinks %}
 		 	 		{% endblock %}
 		 	 	</ul>
 			</nav>
+
+			<div class="user_info">
+				<ul>
+					{% if user.is_authenticated %}
+					<li>Logged in as: {{ user.username }} <a href="/accounts/logout/">Logout</a></li>
+					{% else %}
+		 	 		<li><a href="/accounts/login/">Login</a></li>
+					{% endif %}
+				</ul>
+			</div>
+			
 		</header>
-		<div id="content">
+		<div class="content">
 			{% block content %}
 			Placeholder
 			{% endblock %}

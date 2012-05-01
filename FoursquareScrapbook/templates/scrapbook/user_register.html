@@ -1,0 +1,10 @@
+{% extends "scrapbook/base.html" %}
+
+{% block content %}
+<form action="#" method="POST">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Register" />
+<a href="{% url user_login %}"><input type="button" value="Cancel" /></a>
+</form>
+{% endblock content %}

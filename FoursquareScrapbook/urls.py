@@ -20,5 +20,11 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     # scrapbook urls
+    url(r'^$', 'scrapbook.views.root'),
+    
     url(r'^scrapbook/', include('scrapbook.urls')),
+    
+    # user management
+    
+    url(r'^accounts/', include('accounts.urls')),
 )
