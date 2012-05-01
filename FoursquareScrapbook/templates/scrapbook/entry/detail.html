@@ -1,0 +1,54 @@
+{% extends "scrapbook/base.html" %}
+
+{% block title %}{{ entry }} ({{ entry.book }}){% endblock %}
+
+{% block scripts %}
+<script src="/media/js/jquery.lightBox/js/jquery.lightbox-0.5.min.js"></script>
+<link rel="stylesheet" href="/media/js/jquery.lightBox/css/jquery.lightbox-0.5.css" />
+{% endblock %}
+
+{% block content %}
+	{% block delete_confirm %}
+	{% endblock %}
+	<article class="entry_detail">
+	<header class="entry_header">
+		{% if user.is_authenticated %}
+		{% block edit_link %}<a href="./edit/">Edit<a/>{% endblock %}
+		{% block delete_link %}<a href="./delete/">Delete</a>{% endblock %}
+		{% endif %}
+		<h1><a href="#">{{ entry }}</a></h1>
+	</header>
+	
+	<ul id="gallery" class="gallery">
+		{% if cover %}
+		<li class="cover_photo">
+			<a href="{{ cover.lightbox }}" title="{{cover.image.caption}}"><img src="{{cover.thumbnail }}"/></a>
+		</li>
+		{% endif %}
+		{% for photo in photos %}
+		<li>
+			<a href="{{photo.lightbox}}" title="{{photo.image.caption}}"><img src="{{photo.thumbnail}}"/></a>
+		</li>
+		{% endfor %}
+	</ul>
+
+	<p class="description">{{ entry.description|linebreaks }}</p>
+	
+	<h2>Associated Checkin:</h2>
+	<p>{{ entry.checkin }}</p>
+	</article>
+	{% block book_link %}<a href="{% url book_detail pk=entry.book.id %}">Back to Book: {{ entry.book }}</a>{% endblock %}
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var imageDir = "/media/js/jquery.lightBox/images/";
+			$("#gallery a").lightBox({
+				imageLoading: imageDir + "lightbox-ico-loading.gif",
+				imageBtnClose: imageDir + "lightbox-btn-close.gif",
+				imageBtnPrev: imageDir + "lightbox-btn-prev.gif",
+				imageBtnNext: imageDir + "lightbox-btn-next.gif",
+				imageBlank: imageDir + "lightbox-blank.gif"
+			});
+		});
+	</script>	
+{% endblock content %}

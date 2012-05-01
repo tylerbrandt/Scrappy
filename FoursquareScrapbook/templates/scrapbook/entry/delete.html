@@ -1,0 +1,14 @@
+{% extends "scrapbook/entry/detail.html" %}
+
+{% block delete_confirm %}
+<form action="#" method="POST" class="delete_confirm">
+{% csrf_token %}
+<p>Are you sure you want to delete this entry?</p>
+<input type="submit" value="Delete"/>
+<a href="../"><input type="button" value="Cancel" /></a>
+</form>
+{% endblock delete_confirm %}
+
+{% block edit_link %}{% endblock %}
+{% block delete_link %}{% endblock %}
+{% block book_link %}{% endblock %}

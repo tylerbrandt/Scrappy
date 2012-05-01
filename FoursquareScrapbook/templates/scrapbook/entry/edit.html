@@ -1,0 +1,11 @@
+{% extends "scrapbook/base.html" %}
+
+{% block content %}
+<form action="../" method="POST" enctype="multipart/form-data">
+	{% csrf_token %}
+	<input type="submit" value="Update"/>
+	<a href="../"><input type="button" value="Cancel" /></a>
+
+	{% include "scrapbook/entry/form_part.html" %}	
+</form>
+{% endblock content %}
