@@ -8,56 +8,14 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Book'
-        db.create_table('scrapbook_book', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('cover', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['scrapbook.Photo'], null=True, blank=True)),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-        ))
-        db.send_create_signal('scrapbook', ['Book'])
-
-        # Adding model 'Entry'
-        db.create_table('scrapbook_entry', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('description', self.gf('django.db.models.fields.TextField')()),
-            ('pub_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('checkin', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['scrapbook.Checkin'], null=True, on_delete=models.SET_NULL, blank=True)),
-            ('book', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['scrapbook.Book'], null=True, blank=True)),
-        ))
-        db.send_create_signal('scrapbook', ['Entry'])
-
-        # Adding model 'Checkin'
-        db.create_table('scrapbook_checkin', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('checkin_id', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('venue_name', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True)),
-        ))
-        db.send_create_signal('scrapbook', ['Checkin'])
-
-        # Adding model 'Photo'
-        db.create_table('scrapbook_photo', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('entry', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['scrapbook.Entry'])),
-            ('image', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-        ))
-        db.send_create_signal('scrapbook', ['Photo'])
+        # Deleting field 'Photo.thumb'
+        db.delete_column('scrapbook_photo', 'thumb')
 
     def backwards(self, orm):
-        # Deleting model 'Book'
-        db.delete_table('scrapbook_book')
-
-        # Deleting model 'Entry'
-        db.delete_table('scrapbook_entry')
-
-        # Deleting model 'Checkin'
-        db.delete_table('scrapbook_checkin')
-
-        # Deleting model 'Photo'
-        db.delete_table('scrapbook_photo')
+        # Adding field 'Photo.thumb'
+        db.add_column('scrapbook_photo', 'thumb',
+                      self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True),
+                      keep_default=False)
 
     models = {
         'auth.group': {
@@ -115,16 +73,19 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Entry'},
             'book': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['scrapbook.Book']", 'null': 'True', 'blank': 'True'}),
             'checkin': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['scrapbook.Checkin']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
+            'cover_photo': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'coverphoto'", 'null': 'True', 'to': "orm['scrapbook.Photo']"}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'pub_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'scrapbook.photo': {
-            'Meta': {'object_name': 'Photo'},
+            'Meta': {'unique_together': "(('entry', 'orderNum'),)", 'object_name': 'Photo'},
+            'caption': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'entry': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['scrapbook.Entry']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.FileField', [], {'max_length': '100'})
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
+            'orderNum': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
         }
     }
 

@@ -8,25 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'Checkin.id'
-        db.delete_column('scrapbook_checkin', 'id')
-
-
-        # Changing field 'Checkin.checkin_id'
-        db.alter_column('scrapbook_checkin', 'checkin_id', self.gf('django.db.models.fields.CharField')(max_length=200, primary_key=True))
-        # Adding unique constraint on 'Checkin', fields ['checkin_id']
-        db.create_unique('scrapbook_checkin', ['checkin_id'])
+        # Adding field 'Photo.orderNum'
+        db.add_column('scrapbook_photo', 'orderNum',
+                      self.gf('django.db.models.fields.PositiveIntegerField')(default=1),
+                      keep_default=False)
 
     def backwards(self, orm):
-        # Removing unique constraint on 'Checkin', fields ['checkin_id']
-        db.delete_unique('scrapbook_checkin', ['checkin_id'])
+        # Deleting field 'Photo.orderNum'
+        db.delete_column('scrapbook_photo', 'orderNum')
 
-
-        # User chose to not deal with backwards NULL issues for 'Checkin.id'
-        raise RuntimeError("Cannot reverse this migration. 'Checkin.id' and its values cannot be restored.")
-
-        # Changing field 'Checkin.checkin_id'
-        db.alter_column('scrapbook_checkin', 'checkin_id', self.gf('django.db.models.fields.CharField')(max_length=200))
     models = {
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -73,8 +63,10 @@ class Migration(SchemaMigration):
         },
         'scrapbook.checkin': {
             'Meta': {'object_name': 'Checkin'},
-            'checkin_id': ('django.db.models.fields.CharField', [], {'max_length': '200', 'primary_key': 'True'}),
+            'checkin_id': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'}),
             'venue_name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'scrapbook.entry': {
@@ -88,9 +80,11 @@ class Migration(SchemaMigration):
         },
         'scrapbook.photo': {
             'Meta': {'object_name': 'Photo'},
+            'caption': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'entry': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['scrapbook.Entry']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.FileField', [], {'max_length': '100'})
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
+            'orderNum': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'})
         }
     }
 

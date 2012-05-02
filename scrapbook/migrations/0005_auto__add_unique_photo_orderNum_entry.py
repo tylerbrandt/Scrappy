@@ -8,13 +8,13 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding unique constraint on 'Photo', fields ['orderNum', 'entry']
+        db.create_unique('scrapbook_photo', ['orderNum', 'entry_id'])
 
-        # Changing field 'Book.cover'
-        db.alter_column('scrapbook_book', 'cover_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['scrapbook.Photo'], null=True))
     def backwards(self, orm):
+        # Removing unique constraint on 'Photo', fields ['orderNum', 'entry']
+        db.delete_unique('scrapbook_photo', ['orderNum', 'entry_id'])
 
-        # Changing field 'Book.cover'
-        db.alter_column('scrapbook_book', 'cover_id', self.gf('django.db.models.fields.related.ForeignKey')(default='', to=orm['scrapbook.Photo']))
     models = {
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -54,7 +54,7 @@ class Migration(SchemaMigration):
         },
         'scrapbook.book': {
             'Meta': {'object_name': 'Book'},
-            'cover': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['scrapbook.Photo']", 'null': 'True'}),
+            'cover': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['scrapbook.Photo']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
@@ -64,6 +64,7 @@ class Migration(SchemaMigration):
             'checkin_id': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'}),
             'venue_name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'scrapbook.entry': {
@@ -76,10 +77,12 @@ class Migration(SchemaMigration):
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'scrapbook.photo': {
-            'Meta': {'object_name': 'Photo'},
+            'Meta': {'unique_together': "(('entry', 'orderNum'),)", 'object_name': 'Photo'},
+            'caption': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'entry': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['scrapbook.Entry']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.FileField', [], {'max_length': '100'})
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
+            'orderNum': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
         }
     }
 

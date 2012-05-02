@@ -8,13 +8,17 @@
 		{% endblock %}
 	</head>
 	<body>
+		{% if error %}
 		<div class="error">{{ error }}</div>
+		{% endif %}
 		<header>
 		 	<h1>Foursquare Scrapbook</h1>
 		 	<nav>
 		 	 	<ul>
+		 	 		{% if user.is_authenticated %}
 		 	 		<li><a href="/scrapbook/">Books</a></li>
 		 	 		<li><a href="/scrapbook/checkins/">Checkins</a></li>
+		 	 		{% endif %}
 		 	 		{% block additional_navlinks %}
 		 	 		{% endblock %}
 		 	 	</ul>

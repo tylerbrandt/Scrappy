@@ -1,0 +1,12 @@
+{% extends "scrapbook/base.html" %}
+
+{% block content %}
+<form action="{% url book_detail pk=form.instance.id %}" method="POST">
+<input type="submit" value="Update" />
+<a href="../"><input type="button" value="Cancel" /></a>
+{% csrf_token %}
+{{ form.as_p }}
+<h2>Entries</h2>
+{% include "scrapbook/table_part.html" with formset=entries %}
+</form>
+{% endblock content %}

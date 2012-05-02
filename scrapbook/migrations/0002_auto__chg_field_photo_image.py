@@ -8,57 +8,13 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Book'
-        db.create_table('scrapbook_book', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('cover', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['scrapbook.Photo'], null=True, blank=True)),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-        ))
-        db.send_create_signal('scrapbook', ['Book'])
 
-        # Adding model 'Entry'
-        db.create_table('scrapbook_entry', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('description', self.gf('django.db.models.fields.TextField')()),
-            ('pub_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('checkin', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['scrapbook.Checkin'], null=True, on_delete=models.SET_NULL, blank=True)),
-            ('book', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['scrapbook.Book'], null=True, blank=True)),
-        ))
-        db.send_create_signal('scrapbook', ['Entry'])
-
-        # Adding model 'Checkin'
-        db.create_table('scrapbook_checkin', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('checkin_id', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('venue_name', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True)),
-        ))
-        db.send_create_signal('scrapbook', ['Checkin'])
-
-        # Adding model 'Photo'
-        db.create_table('scrapbook_photo', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('entry', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['scrapbook.Entry'])),
-            ('image', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-        ))
-        db.send_create_signal('scrapbook', ['Photo'])
-
+        # Changing field 'Photo.image'
+        db.alter_column('scrapbook_photo', 'image', self.gf('django.db.models.fields.files.ImageField')(max_length=100))
     def backwards(self, orm):
-        # Deleting model 'Book'
-        db.delete_table('scrapbook_book')
 
-        # Deleting model 'Entry'
-        db.delete_table('scrapbook_entry')
-
-        # Deleting model 'Checkin'
-        db.delete_table('scrapbook_checkin')
-
-        # Deleting model 'Photo'
-        db.delete_table('scrapbook_photo')
-
+        # Changing field 'Photo.image'
+        db.alter_column('scrapbook_photo', 'image', self.gf('django.db.models.fields.files.FileField')(max_length=100))
     models = {
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -124,7 +80,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Photo'},
             'entry': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['scrapbook.Entry']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.FileField', [], {'max_length': '100'})
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'})
         }
     }
 

@@ -8,26 +8,14 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Book'
-        db.create_table('scrapbook_book', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('cover', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['scrapbook.Photo'])),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-        ))
-        db.send_create_signal('scrapbook', ['Book'])
-
-        # Adding field 'Entry.book'
-        db.add_column('scrapbook_entry', 'book',
-                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['scrapbook.Book'], null=True, blank=True),
+        # Adding field 'Photo.caption'
+        db.add_column('scrapbook_photo', 'caption',
+                      self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True),
                       keep_default=False)
 
     def backwards(self, orm):
-        # Deleting model 'Book'
-        db.delete_table('scrapbook_book')
-
-        # Deleting field 'Entry.book'
-        db.delete_column('scrapbook_entry', 'book_id')
+        # Deleting field 'Photo.caption'
+        db.delete_column('scrapbook_photo', 'caption')
 
     models = {
         'auth.group': {
@@ -68,7 +56,7 @@ class Migration(SchemaMigration):
         },
         'scrapbook.book': {
             'Meta': {'object_name': 'Book'},
-            'cover': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['scrapbook.Photo']"}),
+            'cover': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['scrapbook.Photo']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
@@ -78,6 +66,7 @@ class Migration(SchemaMigration):
             'checkin_id': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'}),
             'venue_name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'scrapbook.entry': {
@@ -91,9 +80,10 @@ class Migration(SchemaMigration):
         },
         'scrapbook.photo': {
             'Meta': {'object_name': 'Photo'},
+            'caption': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'entry': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['scrapbook.Entry']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.FileField', [], {'max_length': '100'})
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'})
         }
     }
 

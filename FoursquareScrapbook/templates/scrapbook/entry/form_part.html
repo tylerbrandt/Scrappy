@@ -9,7 +9,9 @@
 		{% for field in photo_form.visible_fields %}
 		<th>{{ field.label|capfirst }}</th>
 		{% endfor %}
+		{% if photo_form.instance.pk %}
 		<th>Cover?</th>
+		{% endif %}
 	  </tr></thead>
 	  {% endif %}
 	  <tr class="{% cycle row1,row2 %}">

@@ -2,15 +2,47 @@
 
 {% block title %}{{ book }}{% endblock %}
 
+{% block scripts %}
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+{% endblock %}
+
 {% block content %}
 <h1>{{ book }}</h1>
-
+{% if user.is_authenticated %}
+<a href="./edit">Edit</a>
+{% endif %}
 <img src="{{ book.image.url }}" />
 
+{% if book.geo %}
+<section class="map">
+	<div id="map_canvas" class="map_canvas"></div>
+</section>
+{% endif %}
+
+<section class="book_entries">
+<header>
 <h2>Entries</h2>
-{% for entry in book.entry_set.all %}
-<article>
-	<a href="entries/{{ entry.id }}/">{{ entry }}</a>
+{% if user.is_authenticated %}
+<a href="./entries/new/">New</a>
+{% endif %}
+</header>
+{% for entry in entries %}
+<article id="entry_{{ entry.object.orderNum }}">
+	<header>
+		<h3><a href="entries/{{ entry.object.id }}/">{{ entry.object }}</a></h3>
+		{% if entry.object.checkin %}
+		<p class="checkin">
+			At: <span class='title'>{{ entry.object.checkin }}</span>
+			<span class="geo">{{ entry.location }}</span>
+		</p>
+		{% endif %}
+	</header>
+	<section class="body">
+		<img src="{{entry.thumbnail}}" />
+		<p class="description">{{ entry.description|linebreaks }}</p>
+	</section>
 </article>
 {% endfor %}
+</section>
+<script src="/media/js/map.js"></script>
 {% endblock content %}

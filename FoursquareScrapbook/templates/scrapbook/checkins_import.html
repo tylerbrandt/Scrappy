@@ -6,7 +6,7 @@
 <form action="../import_selected/" method="POST" id="import_checkins">
 {% csrf_token %}
 <input type="submit" value="Import Selected Checkins" />
-<table class="checkins_list">
+<!--table class="checkins_list">
 	<tr>
 		<th>Import?</th>
 		<th>ID</th>
@@ -14,7 +14,7 @@
 		<th>Timestamp</th>
 	</tr>
 {% for checkin in checkins %}
-	<tr class="checkin">
+	<tr class="checkin{% if checkin.imported %} imported{% endif %}">
 		<td>
 			{% if checkin.imported %}
 			<input type="checkbox" disabled="disabled" />
@@ -27,15 +27,36 @@
 		<td class="checkin_timestamp">{{ checkin.createdAt }}</td>
 	</tr>
 {% endfor %}
-</table>
+</table-->
+{{ formset.non_form_errors.as_ul }}
+	{{ formset.management_form }}
+	<table id="formset" class="form">
+	{% for form in formset.forms %}
+	  {% if forloop.first %}
+	  <thead><tr>
+		{% for field in form.visible_fields %}
+		<th>{{ field.label|capfirst }}</th>
+		{% endfor %}
+	  </tr></thead>
+	  {% endif %}
+	  <tr class="{% cycle row1,row2 %}">
+	  {% for field in form.visible_fields %}
+		<td>
+		{# Include the hidden fields in the form #}
+		{% if forloop.first %}
+		  {% for hidden in form.hidden_fields %}
+		  {{ hidden }}
+		  {% endfor %}
+		{% endif %}
+		  {{ field.errors.as_ul }}
+		  {{ field }}
+		</td>
+	  {% endfor %}
+	  </tr>
+	{% endfor %}
+	</table>
 <input name="checkin_data" type="hidden" />
 </form>
-<div id="debuginfo">
-Auth Code: {{ code }}<p/>
-Token Response: {{ token_response }}<p/>
-Token: {{ token }}<p/>
-Raw data: {{ raw }}<p/>
-</div>
 
 <script>
 $(document).ready(function() {
