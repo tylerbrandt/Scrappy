@@ -199,7 +199,6 @@ class EntryView:
 				checkin=None
 				if request.POST['checkin']:
 					entry.checkin = Checkin.objects.get(pk=request.POST['checkin'])
-				entry.save()
 				
 				
 				photos = PhotoInlineFormset(request.POST, request.FILES, instance=entry)
@@ -225,7 +224,8 @@ class EntryView:
 				#if realErrors:
 				#	return render_to_response("scrapbook/entry/edit.html", { "form": form, "photos": photos, "error": photos.errors }, context_instance=RequestContext(request))
 				#else:
-					return HttpResponseRedirect(reverse('entry_detail', kwargs={ 'pk': entry.id }))
+				entry.save()
+				return HttpResponseRedirect(reverse('entry_detail', kwargs={ 'pk': entry.id }))
 			else:
 				print "Error: %s" % form.errors
 				return render_to_response("scrapbook/entry/new.html", { "form": form, "photos": photos, "error": form.errors }, context_instance=RequestContext(request))
