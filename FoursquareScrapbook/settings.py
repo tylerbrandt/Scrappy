@@ -11,7 +11,7 @@ MANAGERS = ADMINS
 
 # For working with paths
 import os
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+SITE_ROOT = '/app/FoursquareScrapbook/FoursquareScrapbook'#os.path.dirname(os.path.realpath(__file__))
 
 DATABASES = {
     'default': {
