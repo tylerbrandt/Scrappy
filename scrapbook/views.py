@@ -189,7 +189,7 @@ class EntryView:
 			
 			form = EntryView.EntryForm(request.POST, request=request)
 			
-			PhotoInlineFormset = inlineformset_factory(Entry, Photo, can_order=True)
+			PhotoInlineFormset = inlineformset_factory(Entry, Photo)#, can_order=True)
 			photos = PhotoInlineFormset(request.POST, request.FILES)
 			
 			if form.is_valid():
@@ -199,32 +199,32 @@ class EntryView:
 				checkin=None
 				if request.POST['checkin']:
 					entry.checkin = Checkin.objects.get(pk=request.POST['checkin'])
-				
+				entry.save()
+
 				
 				photos = PhotoInlineFormset(request.POST, request.FILES, instance=entry)
-				photo_order = [0 for photo_form in photos]
+				#photo_order = [0 for photo_form in photos]
 				for photo_form in photos:
 					if photo_form.is_valid():
 						photo = photo_form.save(commit=False)
 						if photo.image:
 							#print "Saving: %s" % photo.image
 
-							order = photo_form.cleaned_data['ORDER'] - 1
+							#order = photo_form.cleaned_data['ORDER'] - 1
 							#print "Order: %s" % order
 
-							photo_order[order] = photo.pk
+							#photo_order[order] = photo.pk
 							photo.save()
 						else:
 							print "Photo with no image! horror!"
 					else:
 						pass
 
-				entry.set_photo_order(photo_order)
+				#entry.set_photo_order(photo_order)
 
 				#if realErrors:
 				#	return render_to_response("scrapbook/entry/edit.html", { "form": form, "photos": photos, "error": photos.errors }, context_instance=RequestContext(request))
 				#else:
-				entry.save()
 				return HttpResponseRedirect(reverse('entry_detail', kwargs={ 'pk': entry.id }))
 			else:
 				print "Error: %s" % form.errors
