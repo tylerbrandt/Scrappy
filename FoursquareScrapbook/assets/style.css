@@ -1,0 +1,83 @@
+body {
+	font-family: sans-serif;
+}
+
+nav ul {
+	padding: 0;
+}
+
+.error {
+	color: red;
+	background-color: pink;
+}
+
+nav li {
+	display: inline;
+	list-style: none;
+	margin-right: 10px;
+}
+
+.user_info li {
+	float: right;
+	list-style: none;
+}
+
+.content {		
+	clear: both;
+	border-top: 1px solid black;
+}
+
+.map_canvas {
+	width: 90%;
+	height: 400px;
+	margin: auto;
+}
+
+.geo {
+	display: none;
+}
+
+.book_entries article {
+	border-top: 1px solid black;
+	clear: both;
+}
+
+.book_entries .body img {
+	float: left;
+	margin: 0 10px 10px 10px;
+}
+
+.entry_header h1 a {
+	text-decoration: none;
+	color: black;
+}
+
+.entry_header h1 a:hover {
+	text-decoration: underline;
+}
+
+.gallery li {
+	float: left;
+	list-style-type: none;
+	margin-right: 5px;
+}
+
+.gallery img {
+	height: 200px;
+}
+
+.gallery .cover_photo img {
+	height: 400px;
+}
+
+.entry_detail .description {
+	clear: both;
+}
+
+.checkin.imported {
+	font-style: italic;
+}
+
+#debuginfo {
+	background-color: yellow;
+}
