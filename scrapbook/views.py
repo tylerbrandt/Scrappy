@@ -222,9 +222,9 @@ class EntryView:
 
 				entry.set_photo_order(photo_order)
 
-				if realErrors:
-					return render_to_response("scrapbook/entry/edit.html", { "form": form, "photos": photos, "error": photos.errors }, context_instance=RequestContext(request))
-				else:
+				#if realErrors:
+				#	return render_to_response("scrapbook/entry/edit.html", { "form": form, "photos": photos, "error": photos.errors }, context_instance=RequestContext(request))
+				#else:
 					return HttpResponseRedirect(reverse('entry_detail', kwargs={ 'pk': entry.id }))
 			else:
 				print "Error: %s" % form.errors
