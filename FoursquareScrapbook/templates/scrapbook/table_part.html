@@ -5,6 +5,9 @@
 {% for form in formset.forms %}
   {% if forloop.first %}
   <thead><tr>
+    {% if formset.can_order %}
+    <th class="sort_handle"></th>
+    {% endif %}
     {% for field in form.visible_fields %}
     <th>{{ field.label|capfirst }}</th>
     {% endfor %}
@@ -13,6 +16,9 @@
   </tr></thead>
   {% endif %}
   <tr class="{% cycle row1,row2 %}">
+    {% if formset.can_order %}
+    <td class="sort_handle ui-icon ui-icon-arrowthick-2-n-s"></td>
+    {% endif %}
   {% for field in form.visible_fields %}
     <td>
     {# Include the hidden fields in the form #}
@@ -29,4 +35,5 @@
   {% endblock %}
   </tr>
 {% endfor %}
+<script src="/media/js/sortable.js"></script>
 </table>

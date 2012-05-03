@@ -1,41 +1,20 @@
-{{ form.as_p }}
+{% extends "scrapbook/table_part.html" %}
 	
-	{{ photos.non_form_errors.as_ul }}
-	{{ photos.management_form }}
-	<table id="formset" class="form">
-	{% for photo_form in photos.forms %}
-	  {% if forloop.first %}
-	  <thead><tr>
-		{% for field in photo_form.visible_fields %}
-		<th>{{ field.label|capfirst }}</th>
-		{% endfor %}
-		{% if photo_form.instance.pk %}
+	{% block extra_columns %}
+		{% if form.instance.pk %}
 		<th>Cover?</th>
 		{% endif %}
-	  </tr></thead>
-	  {% endif %}
-	  <tr class="{% cycle row1,row2 %}">
-	  {% for field in photo_form.visible_fields %}
-		<td>
-		{# Include the hidden fields in the form #}
-		{% if forloop.first %}
-		  {% for hidden in photo_form.hidden_fields %}
-		  {{ hidden }}
-		  {% endfor %}
-		{% endif %}
-		  {{ field.errors.as_ul }}
-		  {{ field }}
-		</td>
-	  {% endfor %}
-	  {% if photo_form.instance.pk %}
+	{% endblock %}
+	  
+	{% block extra_column_values %}
+	  {% if form.instance.pk %}
         <td><input type="radio" id="id_cover_image_{{ forloop.counter }}" 
-        		name="cover_image" value="{{ photo_form.instance.pk }}" 
-        		{% if photo_form.instance.pk == form.instance.cover_photo.id %}checked="true"{% endif %} >
+        		name="cover_image" value="{{ form.instance.pk }}" 
+        		{% if form.instance.pk == parent.instance.cover_photo.id %}checked="true"{% endif %} >
         </td>
         <td>
-        	<img src="{{ photo_form.instance.get_thumbnail }}" />
+        	<img src="{{ form.instance.get_thumbnail }}" />
         </td>
       {% endif %}
-	  </tr>
-	{% endfor %}
-	</table>
+    {% endblock %}
+	  

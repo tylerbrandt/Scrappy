@@ -28,14 +28,15 @@ class Entry(models.Model):
 	cover_photo = models.ForeignKey('Photo', null=True, blank=True, related_name='coverphoto')
 
 	# order
-	orderNum = models.PositiveIntegerField(default=0)
+	#orderNum = models.PositiveIntegerField(default=0)
 
 	class Meta:
-		unique_together=('book','orderNum')
+		order_with_respect_to= 'book'
+		#unique_together = ('book','_order')
 
 	def save(self, *args, **kwargs):
-		if self.orderNum is 0:
-			self.orderNum = len(Entry.objects.filter(book=self.book)) + 1
+		#if self.orderNum is 0:
+		#	self.orderNum = len(Entry.objects.filter(book=self.book)) + 1
 
 		super(Entry, self).save(*args, **kwargs)
 
@@ -45,7 +46,7 @@ class Entry(models.Model):
 	def alt_photos(self):
 		"""Return Photos for current Entry that are not the Cover Photo ordered by orderNum"""
 		cover_photo_id = self.cover_photo and self.cover_photo.id or None
-		return self.photo_set.exclude(id=cover_photo_id).order_by('orderNum')
+		return self.photo_set.exclude(id=cover_photo_id).all()
 
 	
 
@@ -85,15 +86,17 @@ class Photo(models.Model):
 	# Caption
 	caption = models.CharField(max_length=200, null=True, blank=True)
 	# order num
-	orderNum = models.PositiveIntegerField(default=0)
+	#orderNum = models.PositiveIntegerField(default=0)
 	
 	class Meta:
-		unique_together = ("entry", "orderNum")
+		order_with_respect_to = 'entry'
+		#unique_together = ("entry", "_order")
+
 	
 	def save(self, *args, **kwargs):
 		"""Override save to provide auto-sequence number for new photos"""
-		if self.orderNum is 0:
-			self.orderNum = len(Photo.objects.filter(entry=self.entry))+1
+		#if self.orderNum is 0:
+		#	self.orderNum = len(Photo.objects.filter(entry=self.entry))+1
 
 		if not self.entry.cover_photo:
 			print "Setting cover photo for %s to: %s" % (self.entry, self.image.url)

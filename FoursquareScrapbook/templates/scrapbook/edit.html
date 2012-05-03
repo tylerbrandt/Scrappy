@@ -1,5 +1,9 @@
 {% extends "scrapbook/base.html" %}
 
+{% block scripts %}
+{% include "scrapbook/jqueryui_part.html" %}
+{% endblock %}
+
 {% block content %}
 <form action="{% url book_detail pk=form.instance.id %}" method="POST">
 <input type="submit" value="Update" />
