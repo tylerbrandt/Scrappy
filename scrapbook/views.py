@@ -283,11 +283,14 @@ class EntryView:
 						photo = photo_form.save(commit=False)
 						if photo.image:
 							#print "Saving: %s" % photo.image
+							if 'ORDER' in photo_form.cleaned_data:
+								formOrder = photo_form.cleaned_data['ORDER']
+								if formOrder is not None:
+									# TODO: probably should handle this better
+									order = formOrder - 1
+									#print "Order: %s" % order
 
-							order = photo_form.cleaned_data['ORDER'] - 1
-							#print "Order: %s" % order
-
-							photo_order[order] = photo.pk
+									photo_order[order] = photo.pk
 							photo.save()
 						else:
 							print "Photo with no image! horror!"
