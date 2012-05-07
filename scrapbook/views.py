@@ -308,15 +308,15 @@ class EntryView:
 					if entry.cover_photo:
 						cover = {	
 							"image": entry.cover_photo,
-							"thumbnail": entry.cover_photo.get_thumbnail((400,400)),
-							"lightbox": entry.cover_photo.get_thumbnail((800,600)),
+							"thumbnail": entry.cover_photo.get_thumbnail((600,400)),
+							"lightbox": entry.cover_photo.get_thumbnail((1024,600)),
 						}
 					context['cover'] = cover
 					
 					photos = [{ "image": photo } for photo in entry.alt_photos()]
 					for photo in photos:
-						photo["thumbnail"] = photo['image'].get_thumbnail((400,400))
-						photo["lightbox"] = photo['image'].get_thumbnail((800,600))
+						photo["thumbnail"] = photo['image'].get_thumbnail((300,200))
+						photo["lightbox"] = photo['image'].get_thumbnail((1024,600))
 					context['photos'] = photos
 			else:
 				context['error'] = form.errors
