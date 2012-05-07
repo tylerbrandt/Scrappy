@@ -11,10 +11,12 @@
 	{% block delete_confirm %}
 	{% endblock %}
 	<article class="entry_detail">
+	{% block book_link %}<a class="breadcrumb" href="{% url book_detail pk=entry.book.id %}">Back to Book: {{ entry.book }}</a>{% endblock %}
+
 	<header class="entry_header">
 		{% if user.is_authenticated %}
-		{% block edit_link %}<a href="./edit/">Edit<a/>{% endblock %}
-		{% block delete_link %}<a href="./delete/">Delete</a>{% endblock %}
+		{% block edit_link %}<a class="action" href="./edit/">Edit<a/>{% endblock %}
+		{% block delete_link %}<a class="action" href="./delete/">Delete</a>{% endblock %}
 		{% endif %}
 		<h1><a href="#">{{ entry }}</a></h1>
 	</header>
@@ -32,12 +34,12 @@
 		{% endfor %}
 	</ul>
 
-	<p class="description">{{ entry.description|linebreaks }}</p>
+	<div class="description">{{ entry.description|linebreaks }}</div>
 	
 	<h2>Associated Checkin:</h2>
-	<p>{{ entry.checkin }}</p>
+	<p class="checkin">{{ entry.checkin }}</p>
 	</article>
-	{% block book_link %}<a href="{% url book_detail pk=entry.book.id %}">Back to Book: {{ entry.book }}</a>{% endblock %}
+	
 	
 	<script type="text/javascript">
 		$(document).ready(function() {

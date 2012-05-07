@@ -7,10 +7,12 @@
 {% endblock %}
 
 {% block content %}
+<header>
 <h1>{{ book }}</h1>
 {% if user.is_authenticated %}
-<a href="./edit">Edit</a>
+<a class="action" href="./edit">Edit</a>
 {% endif %}
+</header>
 <img src="{{ book.image.url }}" />
 
 {% if book.geo %}
@@ -23,23 +25,29 @@
 <header>
 <h2>Entries</h2>
 {% if user.is_authenticated %}
-<a href="./entries/new/">New</a>
+<a class="action" href="./entries/new/">New</a>
 {% endif %}
 </header>
 {% for entry in entries %}
 <article id="entry_{{ entry.object.orderNum }}">
 	<header>
-		<h3><a href="entries/{{ entry.object.id }}/">{{ entry.object }}</a></h3>
+		<h3><a href="{% url entry_detail pk=entry.object.id %}">{{ entry.object }}</a></h3>
 		{% if entry.object.checkin %}
-		<p class="checkin">
-			At: <span class='title'>{{ entry.object.checkin }}</span>
-			<span class="geo">{{ entry.location }}</span>
+		<p class="checkin" data-geo="{{ entry.location }}">
+			<span class='title'>{{ entry.object.checkin }}</span>
 		</p>
 		{% endif %}
 	</header>
-	<section class="body">
-		<img src="{{entry.thumbnail}}" />
-		<p class="description">{{ entry.description|linebreaks }}</p>
+	<section class="body clearfix">
+		{% if entry.thumbnail %}
+		<div class="thumbnail">
+			<img src="{{entry.thumbnail}}" />
+		</div>
+		{% endif %}
+		<div class="description">
+			{{ entry.description|linebreaks }}
+			<a href="{% url entry_detail pk=entry.object.id %}">Read More...</a>
+		</div>
 	</section>
 </article>
 {% endfor %}

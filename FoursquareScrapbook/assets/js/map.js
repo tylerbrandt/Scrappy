@@ -9,7 +9,8 @@ $(document).ready(function() {
 			var loc, lat, lng;
 			if($(this).find(".checkin").length > 0) {
 				
-				loc = JSON.parse($(".geo", this).html());
+				loc = $(this).find(".checkin").data("geo");
+				//loc = JSON.parse(locdata);
 				lat = parseFloat(loc.lat);
 				lng = parseFloat(loc.lng);
 

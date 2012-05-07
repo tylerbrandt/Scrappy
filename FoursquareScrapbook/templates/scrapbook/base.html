@@ -3,7 +3,7 @@
 	<head>
 		<title>Foursquare Scrapbook - {% block title %}Home{% endblock %}</title>
 		<link rel="stylesheet" type="text/css" href="/media/style.css" />
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="/media/js/jquery-ui-1.8.20.custom/js/jquery-1.7.2.min.js"></script>
 		{% block scripts %}
 		{% endblock %}
 	</head>
@@ -21,18 +21,13 @@
 		 	 		{% endif %}
 		 	 		{% block additional_navlinks %}
 		 	 		{% endblock %}
+		 	 		{% if user.is_authenticated %}
+					<li class="user_info">Logged in as: {{ user.username }} <a href="/accounts/logout/">Logout</a></li>
+					{% else %}
+		 	 		<li class="user_info"><a href="/accounts/login/">Login</a></li>
+					{% endif %}
 		 	 	</ul>
 			</nav>
-
-			<div class="user_info">
-				<ul>
-					{% if user.is_authenticated %}
-					<li>Logged in as: {{ user.username }} <a href="/accounts/logout/">Logout</a></li>
-					{% else %}
-		 	 		<li><a href="/accounts/login/">Login</a></li>
-					{% endif %}
-				</ul>
-			</div>
 			
 		</header>
 		<div class="content">

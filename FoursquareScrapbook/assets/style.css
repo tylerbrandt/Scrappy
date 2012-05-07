@@ -1,8 +1,29 @@
 body {
 	font-family: sans-serif;
+	width: 100%;
+	background: #444;
+	color: white;
+}
+
+body * {
+	/* TODO: replace with nice reset */
+	margin: 0;
+	padding: 0;
+}
+
+body > header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background: black;
+	color: white;
+	z-index: 1;
+	padding: 10px;
 }
 
 nav ul {
+	position: static;
 	padding: 0;
 }
 
@@ -15,16 +36,52 @@ nav li {
 	display: inline;
 	list-style: none;
 	margin-right: 10px;
+	float: left;
 }
 
-.user_info li {
+nav a {
+	color: gray;
+}
+
+nav a:visited, nav a:active {
+	color: white;
+}
+
+li.user_info {
 	float: right;
 	list-style: none;
 }
 
-.content {		
-	clear: both;
-	border-top: 1px solid black;
+.content {
+	position: absolute;		
+	top: 100px;
+	width: 100%;
+}
+
+.action {
+	font-size: smaller;
+}
+
+.content .breadcrumb {
+	font-size: smaller;
+	text-decoration: underline;
+}
+
+h1, h2, h3 {
+	text-shadow: #555 2px -2px 2px;
+}
+
+.entry_detail h2 {
+	font-size: 16pt;
+}
+
+.content a {
+	text-decoration: none;
+	color: white;
+}
+
+.content a:hover {
+	text-decoration: underline;
 }
 
 .map_canvas {
@@ -33,23 +90,66 @@ nav li {
 	margin: auto;
 }
 
-.geo {
-	display: none;
+.book_entries article {
+	border-top: 1px dotted white;
+	clear: both;
+	padding: 20px 0;
+	margin: 0 20px;
 }
 
-.book_entries article {
-	border-top: 1px solid black;
+.content > header, .book_entries > header {
+	padding-left: 20px;
+}
+
+.book_entries article header {
+	margin-bottom: 20px;
+	padding-left: 10px;
+}
+
+.body {
+	/* background: #FFE; */
+	padding: 10px;
+	width: 95%;
+}
+
+.clearfix:after {
+	content: ".";
+	height: 0;
 	clear: both;
+	display: block;
+	visibility: hidden;
+}
+
+.checkin {
+	font-style: italic;
+	color: gray;
+	font-size: 10pt;
+}
+
+.description p {
+	font-family: serif;
+	margin-bottom: 1em;
+	text-align: justify;
+	/* margin-left: 0; */
+	padding: 0;
+}
+
+.description a {
+	font-family: serif;
+	text-decoration: underline;
+}
+
+.book_entries .body .thumbnail {
+	height: 100%;
 }
 
 .book_entries .body img {
 	float: left;
-	margin: 0 10px 10px 10px;
+	margin: 0 10px 10px 0;
 }
 
 .entry_header h1 a {
 	text-decoration: none;
-	color: black;
 }
 
 .entry_header h1 a:hover {
