@@ -14,11 +14,15 @@
 	{% block book_link %}<a class="breadcrumb" href="{% url book_detail pk=entry.book.id %}">Back to Book: {{ entry.book }}</a>{% endblock %}
 
 	<header class="entry_header">
+		<h1>{{ entry }}</h1>
+		{% if entry.checkin %}
+		<p class="checkin">{{ entry.checkin }}</p>
+		{% endif %}
+
 		{% if user.is_authenticated %}
 		{% block edit_link %}<a class="action" href="./edit/">Edit<a/>{% endblock %}
 		{% block delete_link %}<a class="action" href="./delete/">Delete</a>{% endblock %}
 		{% endif %}
-		<h1><a href="#">{{ entry }}</a></h1>
 	</header>
 	
 	<ul id="gallery" class="gallery">
@@ -36,8 +40,6 @@
 
 	<div class="description">{{ entry.description|linebreaks }}</div>
 	
-	<h2>Associated Checkin:</h2>
-	<p class="checkin">{{ entry.checkin }}</p>
 	</article>
 	
 	
