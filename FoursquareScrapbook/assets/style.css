@@ -148,10 +148,44 @@ table.form td.sort_handle {
 	padding: 0;
 }
 
-.map_canvas {
+.map_wrapper {
 	width: 90%;
 	height: 400px;
-	margin: auto;
+	margin: 30px auto;
+	position: relative;
+	border: 8px solid #FBF8EF;
+}
+
+.map_canvas {
+	width: 100%;
+	height: 100%;
+}
+
+.photo_corners:before {
+	content: "";
+	position: absolute;
+	top: -19px;
+	left: -38px;
+	background-image: url('images/photo_corners.png');
+	/* background-position: 0 -163px; */
+	background-repeat: no-repeat;
+	width: 92px;
+	height: 76px;
+	z-index: 1;
+	background-size: 196px;
+}
+
+.photo_corners:after {
+	content: "";
+	position: absolute;
+	bottom: -15px;
+	right: -15px;
+	background-image: url('images/photo_corners.png');
+	background-repeat: no-repeat;
+	background-position: -115px -70px;
+	width: 62px;
+	height: 66px;
+	background-size: 196px;
 }
 
 .book_entries article {
