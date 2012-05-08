@@ -6,7 +6,7 @@
 {% if user.is_authenticated %}
 <h1>Your Books</h1>
 {% if object_list %}
-<ul>
+<ul class="book_list">
 {% for book in object_list %}
 <li><a href="{{book.id}}/">{{ book }}</a></li>
 {% endfor %}
@@ -14,7 +14,7 @@
 {% else %}
 <p>No books</p>
 {% endif %}
-<a href="./new">New Book</a>
+<a class="action" href="./new">New Book</a>
 {% else %}
 <p>Login to see your books</p>
 {% endif %}
