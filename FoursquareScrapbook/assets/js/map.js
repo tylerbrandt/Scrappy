@@ -48,14 +48,18 @@ $(document).ready(function() {
     	}
     }
 
-	var checkins = getCheckinsLocs(),
-		map = new google.maps.Map(document.getElementById("map_canvas"), {
-      		zoom: 15,
-      		center: checkins.bounds.getCenter(),
-      		mapTypeId: google.maps.MapTypeId.HYBRID            
-    	});
+	function init() {
+		var checkins = getCheckinsLocs(),
+			map = new google.maps.Map(document.getElementById("map_canvas"), {
+      			zoom: 15,
+      			center: checkins.bounds.getCenter(),
+      			mapTypeId: google.maps.MapTypeId.HYBRID            
+    		});
 
     	map.fitBounds(checkins.bounds);
 
-    addPostMarkers(map,checkins.locs);
+    	addPostMarkers(map,checkins.locs);	
+	}
+	
+	init();
 });
