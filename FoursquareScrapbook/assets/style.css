@@ -5,12 +5,6 @@ body {
 	color: white;
 }
 
-body * {
-	/* TODO: replace with nice reset */
-	margin: 0;
-	padding: 0;
-}
-
 body > header {
 	position: fixed;
 	top: 0;
@@ -18,8 +12,33 @@ body > header {
 	width: 100%;
 	background: black;
 	color: white;
-	z-index: 1;
+	z-index: 99;
 	padding: 10px;
+	
+}
+
+body > header h1 {
+	font-style: italic;
+	font-size: 24pt;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+h1 {
+	font-family: "Hoefler Text", "Baskerville old face", Garamond, "Times New Roman", serif;
+	font-size: 20pt;
+}
+
+h2, h3 {
+	font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+}
+
+h2 {
+	font-size: 16pt;
+}
+
+h3 {
+	font-size: 14pt;
 }
 
 nav ul {
@@ -54,12 +73,18 @@ li.user_info {
 
 .content {
 	position: absolute;		
-	top: 100px;
+	top: 95px;
 	width: 100%;
+	margin-left: 10px;
 }
 
-.action {
+.book_list {
+	margin: 20px 0;
+}
+
+.content a.action {
 	font-size: smaller;
+	text-decoration: underline;
 }
 
 .content .breadcrumb {
@@ -159,22 +184,27 @@ table.form td.sort_handle {
 	visibility: hidden;
 }
 
-.checkin {
+.checkin, .subheader {
 	font-style: italic;
 	color: gray;
 	font-size: 10pt;
 }
 
+.description {
+	font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+}
+
 .description p {
-	font-family: serif;
+	/* font-family: serif; */
 	margin-bottom: 1em;
 	text-align: justify;
 	/* margin-left: 0; */
 	padding: 0;
+	width: 90%;
 }
 
 .description a {
-	font-family: serif;
+	/* font-family: serif; */
 	text-decoration: underline;
 }
 
@@ -185,6 +215,12 @@ table.form td.sort_handle {
 .book_entries .body img {
 	float: left;
 	margin: 0 10px 10px 0;
+	border: 5px solid #FBF8EF;
+	border-bottom-width: 20px;
+}
+
+.content > header h1, .entry_header h1 {
+	padding-top: 20px;
 }
 
 .entry_header h1 a {
@@ -195,6 +231,10 @@ table.form td.sort_handle {
 	text-decoration: underline;
 }
 
+.gallery {
+	margin: 20px 0 20px 0;
+}
+
 .gallery li {
 	float: left;
 	list-style-type: none;
@@ -203,6 +243,7 @@ table.form td.sort_handle {
 
 .gallery img {
 	height: 200px;
+	border: 4px solid #FBF8EF;
 }
 
 .gallery .cover_photo img {
