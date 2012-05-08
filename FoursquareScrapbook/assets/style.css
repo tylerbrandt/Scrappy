@@ -84,6 +84,45 @@ h1, h2, h3 {
 	text-decoration: underline;
 }
 
+.content form {
+	background: #999;
+	color: black;
+	padding: 10px;
+	width: 95%;
+}
+
+.content form h2 {
+	text-shadow: none;
+}
+
+/* .content form input, .content form textarea, .content form select {
+	margin: 10px 0;
+} */
+
+.content label {
+	min-width: 90px;
+	display: inline-block;
+	text-align: right;
+	vertical-align: top;
+	/* margin: 10px 0; */
+}
+
+table.form {
+	margin: 10px 0;
+}
+
+table.form input {
+	margin: 0;
+}
+
+table.form td, table.form th {
+	padding: 0 10px;
+}
+
+table.form td.sort_handle {
+	padding: 0;
+}
+
 .map_canvas {
 	width: 90%;
 	height: 400px;
