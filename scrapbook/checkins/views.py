@@ -54,7 +54,6 @@ def checkins_import(request):
 def checkins_response(request):
 	if 'code' in request.GET:
 		code = request.GET['code']
-		#print "###ACCESS CODE###" + code
 		client = oauth_client()
 		resp, content = client.request(foursquare_token_url(code))
 		if resp.status == 200:
@@ -67,8 +66,6 @@ def checkins_response(request):
 				prof = UserProfile(user=request.user)
 			prof.foursquare_token = token
 			prof.save()
-			# test the token
-			# todo: save it somewhere...
 			return checkins_import_request(request, client=client)
 		else:
 			return HttpResponse("Something went wrong getting the token...")
@@ -114,12 +111,6 @@ def checkins_import_request(request, client=oauth_client()):
 			except ObjectDoesNotExist:
 				pass
 		return HttpResponseRedirect(reverse('checkins_list'))
-		# view_obj["checkins"] = checkins
-# 		view_obj["raw"] = checkins_data
-# 		CheckinFormset = modelformset_factory(Checkin, extra=len(checkins), form=ImportCheckinForm)
-# 		form = CheckinFormset(initial=checkins, queryset=Checkin.objects.filter(owner=request.user))
-# 		view_obj['formset'] = form
-# 		return render_to_response("scrapbook/checkins_import.html", view_obj, context_instance=RequestContext(request))
 	else:
 		return HttpResponse("Something went wrong getting the checkins data...")
 
@@ -143,4 +134,4 @@ def checkins_save(request):
 @login_required	
 def checkins_list(request):
 	checkins = Checkin.objects.filter(owner=request.user)
-	return render_to_response("scrapbook/checkins.html", { "object_list": checkins })
+	return render_to_response("scrapbook/checkins.html", { "object_list": checkins }, context_instance=RequestContext(request))

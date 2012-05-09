@@ -7,11 +7,13 @@
 {% if not object_list %}
 	<p>No checkins</p>
 {% else %}
+	<ul>
 	{% for checkin in object_list %}
-	<article>
-		<a href="{{ checkin.id }}">{{ checkin }}</a>
-	</article>
+	<li class="checkin">
+		<p>{{ checkin }}</p>
+	</li>
 	{% endfor %}
+	</ul>
 {% endif %}
-<a href="./import/">Import Checkins Now</a>
+<a class="action" href="./import/">Import Checkins Now</a>
 {% endblock content %}
