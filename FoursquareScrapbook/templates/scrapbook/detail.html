@@ -6,7 +6,7 @@
 <header>
 <h1>{{ book }}</h1>
 <p class="subheader">{{ book.entry_set.all.count }} entries</p>
-{% if user.is_authenticated %}
+{% if actions %}
 <a class="action" href="./edit">Edit</a>
 {% endif %}
 </header>
@@ -26,7 +26,7 @@
 {% load thumbnail %}
 <header>
 <h2>Entries</h2>
-{% if user.is_authenticated %}
+{% if actions %}
 <a class="action" href="./entries/new/">New</a>
 {% endif %}
 </header>

@@ -16,7 +16,7 @@
 		<p class="checkin">{{ entry.checkin }}</p>
 		{% endif %}
 
-		{% if user.is_authenticated %}
+		{% if actions %}
 		{% block edit_link %}<a class="action" href="./edit/">Edit<a/>{% endblock %}
 		{% block delete_link %}<a class="action" href="./delete/">Delete</a>{% endblock %}
 		{% endif %}

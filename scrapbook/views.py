@@ -51,6 +51,11 @@ class ReadOnlyField(forms.Field):
         return self.widget.initial
 # end readonly field
 
+def validate_owner(request, book):
+	if request.user != book.owner:
+		return "Access Denied: this book belongs to %s" % book.owner
+	return None
+
 class BookView:
 	class BookForm(ModelForm):
 		class Meta:
@@ -119,8 +124,11 @@ class BookView:
 						"lat": lat,
 						"lng": lng,
 						})
+
+				# show actions?
+				actions = request.user == book.owner
 			
-			return render_to_response("scrapbook/detail.html", { "book": book, "entries": entries }, context_instance=RequestContext(request))
+			return render_to_response("scrapbook/detail.html", { "book": book, "entries": entries, "actions": actions }, context_instance=RequestContext(request))
 
 		@method_decorator(login_required)
 		def post(self, request, pk):
@@ -161,9 +169,6 @@ class BookView:
 
 			return render_to_response("scrapbook/edit.html", { "form": form, "entries": entries }, context_instance=RequestContext(request))
 
-
-
-
 class EntryView:
 	class EntryForm(ModelForm):		
 		class Meta:
@@ -182,6 +187,7 @@ class EntryView:
 			fields = ('image','caption')#, 'orderNum')
 											
 	class List(View):
+		
 		def get(self, request, book):
 			"""GET /scrapbook/:id/entries => index"""
 			return HttpResponseRedirect(reverse('book_detail', kwargs={ 'pk': book }))
@@ -189,6 +195,11 @@ class EntryView:
 		@method_decorator(login_required)	
 		def post(self, request, book):
 			book = get_object_or_404(Book,pk=book)
+
+			access_error = validate_owner(request, book)
+			if access_error:
+				# TODO: propagate error
+				return self.get(request, book.id)
 			
 			form = EntryView.EntryForm(request.POST, request=request)
 			
@@ -261,16 +272,25 @@ class EntryView:
 			} for photo in entry.alt_photos()]
 			return cover, photos
 
+		def get_helper(self, request, entry, error=None):
+			cover, photos = self.gen_photos(entry)
+
+			actions = request.user == entry.book.owner
+								
+			return render_to_response("scrapbook/entry/detail.html", { "entry": entry, "cover": cover, "photos": photos, "actions": actions, "error": error }, context_instance=RequestContext(request))
+
 		def get(self, request, pk):
 			entry = get_object_or_404(Entry, pk=pk)
-			
-			cover, photos = self.gen_photos(entry)
-								
-			return render_to_response("scrapbook/entry/detail.html", { "entry": entry, "cover": cover, "photos": photos }, context_instance=RequestContext(request))
-			
+			return self.get_helper(request, entry)
+						
 		@method_decorator(login_required)
 		def post(self, request, pk):
 			entry = get_object_or_404(Entry, pk=pk)
+
+			access_error = validate_owner(request, entry.book)
+			if access_error:
+				return self.get_helper(request, entry, error=access_error)
+
 			form = EntryView.EntryForm(request.POST, instance=entry, request=request)
 
 			PhotoInlineFormset = inlineformset_factory(Entry, Photo, form=EntryView.PhotoForm, can_order=True)
@@ -334,13 +354,19 @@ class EntryView:
 		def post(self, request, pk):
 			entry = get_object_or_404(Entry, pk=pk)
 			book = entry.book
-			entry.delete()
-			return HttpResponseRedirect(reverse('book_detail', kwargs={ 'pk': book.id }))
+
+			access_error = validate_owner(request, book)
+			if access_error:
+				return render_to_response('scrapbook/entry/delete.html', { 'entry': entry, 'error': access_error }, context_instance=RequestContext(request))
+			else:
+				entry.delete()
+				return HttpResponseRedirect(reverse('book_detail', kwargs={ 'pk': book.id }))
 	
 	class Edit(View):
 		@method_decorator(login_required)
 		def get(self, request, pk):
 			entry = get_object_or_404(Entry, pk=pk)
+
 			form = EntryView.EntryForm(instance=entry, request=request)
 			
 			extra = 3
