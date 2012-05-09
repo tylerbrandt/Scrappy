@@ -31,7 +31,7 @@
 {% endif %}
 </header>
 {% for entry in entries %}
-<article id="entry_{{ entry.object.orderNum }}">
+<article id="entry_{{ forloop.counter }}" class="book_entry">
 	<header>
 		<h3><a href="{% url entry_detail pk=entry.object.id %}">{{ entry.object }}</a></h3>
 		{% if entry.object.checkin %}
