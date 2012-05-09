@@ -49,17 +49,29 @@
 	
 	</article>
 	
-	
-	<script type="text/javascript">
-		$(document).ready(function() {
-			var imageDir = "/media/js/jquery.lightBox/images/";
-			$("#gallery a").lightBox({
-				imageLoading: imageDir + "lightbox-ico-loading.gif",
-				imageBtnClose: imageDir + "lightbox-btn-close.gif",
-				imageBtnPrev: imageDir + "lightbox-btn-prev.gif",
-				imageBtnNext: imageDir + "lightbox-btn-next.gif",
-				imageBlank: imageDir + "lightbox-blank.gif"
-			});
-		});
-	</script>	
+		
 {% endblock content %}
+
+{% block scripts %}
+<!-- jquery.lightBox -->
+<script src="/media/js/jquery.lightBox/js/jquery.lightbox-0.5.min.js"></script>
+<link rel="stylesheet" href="/media/js/jquery.lightBox/css/jquery.lightbox-0.5.css" />
+<script type="text/javascript">
+	$(document).ready(function() {
+		var imageDir = "/media/js/jquery.lightBox/images/";
+		$("#gallery a").lightBox({
+			imageLoading: imageDir + "lightbox-ico-loading.gif",
+			imageBtnClose: imageDir + "lightbox-btn-close.gif",
+			imageBtnPrev: imageDir + "lightbox-btn-prev.gif",
+			imageBtnNext: imageDir + "lightbox-btn-next.gif",
+			imageBlank: imageDir + "lightbox-blank.gif"
+		});
+	});
+</script>
+
+<!-- Google Maps API -->
+<!--
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+<script src="/media/js/map.js"></script>
+-->
+{% endblock %}

@@ -2,10 +2,6 @@
 
 {% block title %}{{ book }}{% endblock %}
 
-{% block scripts %}
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
-{% endblock %}
-
 {% block content %}
 <header>
 <h1>{{ book }}</h1>
@@ -58,5 +54,12 @@
 </article>
 {% endfor %}
 </section>
-<script src="/media/js/map.js"></script>
 {% endblock content %}
+
+{% block scripts %}
+{% if book.geo %}
+<!-- Google maps API -->
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+<script src="/media/js/map.js"></script>
+{% endif %}
+{% endblock %}

@@ -4,9 +4,6 @@
 		<title>Scrappy - {% block title %}Home{% endblock %}</title>
 		<link rel="stylesheet" href="/media/reset.css" />
 		<link rel="stylesheet" type="text/css" href="/media/style.css" />
-		<script src="/media/js/jquery-ui-1.8.20.custom/js/jquery-1.7.2.min.js"></script>
-		{% block scripts %}
-		{% endblock %}
 	</head>
 	<body>
 		{% if error %}
@@ -36,6 +33,11 @@
 			Placeholder
 			{% endblock %}
 		</div>
+
+		<!-- Scripts below this line -->
+		<script src="/media/js/jquery-ui-1.8.20.custom/js/jquery-1.7.2.min.js"></script>
+		{% block scripts %}
+		{% endblock %}
 	</body>
 </html>
 		
