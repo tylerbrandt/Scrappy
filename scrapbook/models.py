@@ -89,6 +89,7 @@ class Photo(models.Model):
 	# order num
 	#orderNum = models.PositiveIntegerField(default=0)
 
+	# Use these sizes to avoid massive overhead of computing thumbnails
 	THUMB_SIZES = {
 		'LIGHTBOX': '800x600',
 		'DETAIL': '400x400',
@@ -107,6 +108,10 @@ class Photo(models.Model):
 		# precompute thumbnails
 		for size, sizeString in self.THUMB_SIZES.iteritems():
 			get_thumbnail(self.image, sizeString)
+
+		# set cover
+		if not self.entry.cover_photo:
+			self.entry.cover_photo = self
 
 		
 	def __unicode__(self):
