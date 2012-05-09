@@ -17,26 +17,32 @@ from scrapbook.models import Checkin
 
 
 from django.contrib.auth.decorators import login_required
+from FoursquareScrapbook import settings
 
-CLIENT_ID="Q3XLEGRK3PECAUHJCLIKMJU2L3ASOURJUUVUPOKNHMMGULB5"
-CLIENT_SECRET="CPV4YVQFSI1KQW5ADEOV5JOPOJLXTIKRPG2F1XRTZUEBKQYF"
 FOURSQUARE_BASE="https://foursquare.com/oauth2/authenticate"
-REDIRECT_URI="http://localhost:8000/scrapbook/checkins/import_response/"
+REDIRECT_URI="/scrapbook/checkins/import_response/"
 ACCESS_TOKEN_URL="https://foursquare.com/oauth2/access_token"
 CHECKINS_ENDPOINT="https://api.foursquare.com/v2/users/self/checkins"
 CHECKINS_LIMIT=100
 
-def oauth_client():
+def oauth_client(host):
+	auth = settings.FOURSQUARE_AUTH[host]
+	CLIENT_ID = auth['CLIENT_ID']
+	CLIENT_SECRET = auth['CLIENT_SECRET']
 	consumer = oauth.Consumer(key=CLIENT_ID, secret=CLIENT_SECRET)
 	client = oauth.Client(consumer)
 	return client
 
-def foursquare_auth_url():
-	return "%s?client_id=%s&response_type=code&redirect_uri=%s" % (FOURSQUARE_BASE, CLIENT_ID, REDIRECT_URI)
+def foursquare_auth_url(host):
+	CLIENT_ID = settings.FOURSQUARE_AUTH[host]['CLIENT_ID']
+	return "%s?client_id=%s&response_type=code&redirect_uri=http://%s%s" % (FOURSQUARE_BASE, CLIENT_ID, host, REDIRECT_URI)
 
 # there's probably a better way to do this...
-def foursquare_token_url(code):
-	return "%s?client_id=%s&client_secret=%s&grant_type=authorization_code&redirect_uri=%s&code=%s" % (ACCESS_TOKEN_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, code)
+def foursquare_token_url(code, host):
+	auth = settings.FOURSQUARE_AUTH[host]
+	CLIENT_ID = auth['CLIENT_ID']
+	CLIENT_SECRET = auth['CLIENT_SECRET']
+	return "%s?client_id=%s&client_secret=%s&grant_type=authorization_code&redirect_uri=http://%s%s&code=%s" % (ACCESS_TOKEN_URL, CLIENT_ID, CLIENT_SECRET, host, REDIRECT_URI, code)
 
 @login_required
 def checkins_import(request):
@@ -47,7 +53,8 @@ def checkins_import(request):
 	except ObjectDoesNotExist:
 		pass
 	if token is None:
-		return HttpResponseRedirect(foursquare_auth_url())
+		auth_url = foursquare_auth_url(request.get_host())
+		return HttpResponseRedirect(auth_url)
 	else:
 		return checkins_import_request(request)
 
@@ -55,8 +62,10 @@ def checkins_import(request):
 def checkins_response(request):
 	if 'code' in request.GET:
 		code = request.GET['code']
-		client = oauth_client()
-		resp, content = client.request(foursquare_token_url(code))
+		client = oauth_client(request.get_host())
+		token_url = foursquare_token_url(code, request.get_host())
+		print token_url
+		resp, content = client.request(token_url)
 		if resp.status == 200:
 			data = json.loads(content)
 			token = data['access_token']
@@ -81,7 +90,9 @@ class ImportCheckinForm(ModelForm):
 		fields = ('importSelected','venue_name','created_at','location')
 
 @login_required		
-def checkins_import_request(request, client=oauth_client()):
+def checkins_import_request(request, client=None):
+	if not client:
+		client = oauth_client(request.get_host())
 	token = request.user.get_profile().foursquare_token
 	checkins_url = "%s?limit=%s&oauth_token=%s" % (CHECKINS_ENDPOINT, CHECKINS_LIMIT, token)
 	checkins_resp, checkins_data = client.request(checkins_url)
