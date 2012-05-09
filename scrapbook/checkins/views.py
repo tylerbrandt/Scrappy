@@ -24,6 +24,7 @@ FOURSQUARE_BASE="https://foursquare.com/oauth2/authenticate"
 REDIRECT_URI="http://localhost:8000/scrapbook/checkins/import_response/"
 ACCESS_TOKEN_URL="https://foursquare.com/oauth2/access_token"
 CHECKINS_ENDPOINT="https://api.foursquare.com/v2/users/self/checkins"
+CHECKINS_LIMIT=100
 
 def oauth_client():
 	consumer = oauth.Consumer(key=CLIENT_ID, secret=CLIENT_SECRET)
@@ -82,7 +83,7 @@ class ImportCheckinForm(ModelForm):
 @login_required		
 def checkins_import_request(request, client=oauth_client()):
 	token = request.user.get_profile().foursquare_token
-	checkins_url = "%s?oauth_token=%s" % (CHECKINS_ENDPOINT, token)
+	checkins_url = "%s?limit=%s&oauth_token=%s" % (CHECKINS_ENDPOINT, CHECKINS_LIMIT, token)
 	checkins_resp, checkins_data = client.request(checkins_url)
 	view_obj = {}
 	if checkins_resp.status == 200:
