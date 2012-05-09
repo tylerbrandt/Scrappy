@@ -319,7 +319,7 @@ class EntryView:
 				context['error'] = form.errors
 			
 			if 'error' not in context:	
-				return render_to_response("scrapbook/entry/detail.html", context, context_instance=RequestContext(request))
+				return HttpResponseRedirect(reverse('entry_detail', kwargs={ 'pk': entry.id }))
 			else:
 				return render_to_response("scrapbook/entry/edit.html", context, context_instance=RequestContext(request)) 
 			
