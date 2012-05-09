@@ -24,6 +24,8 @@ def user_register(request):
 		email = request.POST['email']
 		user = User.objects.create_user(username, email, password)
 		user.save()
+		user2 = authenticate(username=username, password=password)
+		login(request, user2)
 		return HttpResponseRedirect('/scrapbook/')
 		
 def user_logout(request):
