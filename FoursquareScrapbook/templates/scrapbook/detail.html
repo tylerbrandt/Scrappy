@@ -25,6 +25,7 @@
 {% endif %}
 
 <section class="book_entries">
+{% load thumbnail %}
 <header>
 <h2>Entries</h2>
 {% if user.is_authenticated %}
@@ -42,11 +43,11 @@
 		{% endif %}
 	</header>
 	<section class="body clearfix">
-		{% if entry.thumbnail %}
+		{% thumbnail entry.thumbnail.image entry.thumbnail.size as thumb %}
 		<div class="thumbnail">
-			<img src="{{entry.thumbnail}}" />
+			<img src="{{thumb.url}}" />
 		</div>
-		{% endif %}
+		{% endthumbnail %}
 		<div class="description">
 			{{ entry.description|linebreaks }}
 			<a href="{% url entry_detail pk=entry.object.id %}">Read More...</a>

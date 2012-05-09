@@ -135,6 +135,10 @@ INSTALLED_APPS = (
     # My app
     'scrapbook',
     'accounts',
+    # Use storages for S3
+    'storages',
+    # magic thumbnails
+    'sorl.thumbnail',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -168,3 +172,12 @@ LOGGING = {
 
 LOGIN_REDIRECT_URL="/scrapbook/"
 AUTH_PROFILE_MODULE="accounts.UserProfile"
+
+# S3
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
+AWS_ACCESS_KEY_ID = 'AKIAILRBF5NXDO4AKVYQ'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'foursquare_scrapbook'
+STATIC_URL = '//s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
+ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'

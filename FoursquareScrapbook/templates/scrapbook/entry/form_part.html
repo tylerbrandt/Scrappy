@@ -12,9 +12,12 @@
         		name="cover_image" value="{{ form.instance.pk }}" 
         		{% if form.instance.pk == parent.instance.cover_photo.id %}checked="true"{% endif %} >
         </td>
+        {% load thumbnail %}
+        {% thumbnail form.instance.image preview_size as preview %}
         <td>
-        	<img src="{{ form.instance.get_thumbnail }}" />
+        	<img class="preview" src="{{ preview.url }}" />
         </td>
+        {% endthumbnail %}
       {% endif %}
     {% endblock %}
 	  

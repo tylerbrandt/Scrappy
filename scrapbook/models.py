@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from sorl.thumbnail import ImageField, get_thumbnail
 
 # Create your models here.
 class Book(models.Model):
@@ -80,13 +81,19 @@ class Photo(models.Model):
 	# Entry
 	entry = models.ForeignKey(Entry)
 	# File
-	image = models.ImageField(upload_to='photos')
+	image = ImageField(upload_to='photos')
 	# Thumb
 	# thumb = models.CharField(max_length=200, null=True, blank=True)
 	# Caption
 	caption = models.CharField(max_length=200, null=True, blank=True)
 	# order num
 	#orderNum = models.PositiveIntegerField(default=0)
+
+	THUMB_SIZES = {
+		'LIGHTBOX': '800x600',
+		'DETAIL': '400x400',
+		'PREVIEW': '100x50',
+	}
 	
 	class Meta:
 		order_with_respect_to = 'entry'
@@ -94,31 +101,13 @@ class Photo(models.Model):
 
 	
 	def save(self, *args, **kwargs):
-		"""Override save to provide auto-sequence number for new photos"""
-		#if self.orderNum is 0:
-		#	self.orderNum = len(Photo.objects.filter(entry=self.entry))+1
-
-		if not self.entry.cover_photo:
-			print "Setting cover photo for %s to: %s" % (self.entry, self.image.url)
-			self.entry.cover_photo = self
-			self.entry.save()
 
 		super(Photo, self).save(*args, **kwargs)
-		
-	def get_thumbnail(self, size=(50,50)):
-		"""Get a thumbnail of designated size, creating one if it doesn't already exist"""
-		import os.path
-		from FoursquareScrapbook import settings
-		from PIL import Image
-		(filename,ext) = os.path.splitext(os.path.basename(self.image.url))
-		filename = "%s%s%s" % (filename, size, ext)
-		thumb_path = os.path.join(settings.MEDIA_ROOT, settings.THUMB_PATH, filename)
-		if not os.path.exists(thumb_path):
-			# create and save the tiny thumbnail
-			image = Image.open(self.image.path)
-			image.thumbnail(size, Image.ANTIALIAS)
-			image.save(thumb_path)
-		return os.path.join(settings.MEDIA_URL, settings.THUMB_PATH, filename)
 
+		# precompute thumbnails
+		for size, sizeString in self.THUMB_SIZES.iteritems():
+			get_thumbnail(self.image, sizeString)
+
+		
 	def __unicode__(self):
 		return str(self.id)

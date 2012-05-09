@@ -25,16 +25,23 @@
 		{% endif %}
 	</header>
 	
+	{% load thumbnail %}
 	<ul id="gallery" class="gallery">
-		{% if cover %}
-		<li class="cover_photo">
-			<a href="{{ cover.lightbox }}" title="{{cover.image.caption}}"><img src="{{cover.thumbnail }}"/></a>
-		</li>
-		{% endif %}
+		{% thumbnail cover.image.image cover.size as thumb %}
+			{% thumbnail cover.image.image cover.lightbox_size as lightbox %}
+			<li class="cover_photo">
+				<a href="{{ lightbox.url }}" title="{{cover.image.caption}}"><img src="{{thumb.url }}"/></a>
+			</li>
+			{% endthumbnail %}
+		{% endthumbnail %}
 		{% for photo in photos %}
-		<li>
-			<a href="{{photo.lightbox}}" title="{{photo.image.caption}}"><img src="{{photo.thumbnail}}"/></a>
-		</li>
+			{% thumbnail photo.image.image photo.size as thumb %}
+				{% thumbnail photo.image.image photo.lightbox_size as lightbox %}
+				<li>
+					<a href="{{lightbox.url}}" title="{{photo.image.caption}}"><img src="{{thumb.url}}"/></a>
+				</li>
+				{% endthumbnail %}
+			{% endthumbnail %}
 		{% endfor %}
 	</ul>
 

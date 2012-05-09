@@ -99,7 +99,10 @@ class BookView:
 			for entry in entries:
 				# Cover
 				if entry["object"].cover_photo:
-					entry["thumbnail"] = entry["object"].cover_photo.get_thumbnail((200,200))
+					entry["thumbnail"] = {
+						'image': entry["object"].cover_photo.image,
+						'size': Photo.THUMB_SIZES['DETAIL']
+					}
 				
 				# Description
 				if len(entry["object"].description) > snippet_length:
@@ -242,21 +245,26 @@ class EntryView:
 	
 	class Detail(View):
 		
-		def get(self, request, pk):
-			entry = get_object_or_404(Entry, pk=pk)
-			
+		def gen_photos(self, entry):
 			cover = None
 			if entry.cover_photo:
 				cover = {	
 					"image": entry.cover_photo,
-					"thumbnail": entry.cover_photo.get_thumbnail((400,400)),
-					"lightbox": entry.cover_photo.get_thumbnail((800,600)),
+					"size": Photo.THUMB_SIZES['DETAIL'],
+					"lightbox_size": Photo.THUMB_SIZES['LIGHTBOX']
 				}
 			
-			photos = [{ "image": photo } for photo in entry.alt_photos()]
-			for photo in photos:
-				photo["thumbnail"] = photo['image'].get_thumbnail((400,400))
-				photo["lightbox"] = photo['image'].get_thumbnail((800,600))
+			photos = [{ 
+				"image": photo, 
+				"size": Photo.THUMB_SIZES['DETAIL'], 
+				"lightbox_size": Photo.THUMB_SIZES['LIGHTBOX'] 
+			} for photo in entry.alt_photos()]
+			return cover, photos
+
+		def get(self, request, pk):
+			entry = get_object_or_404(Entry, pk=pk)
+			
+			cover, photos = self.gen_photos(entry)
 								
 			return render_to_response("scrapbook/entry/detail.html", { "entry": entry, "cover": cover, "photos": photos }, context_instance=RequestContext(request))
 			
@@ -304,19 +312,8 @@ class EntryView:
 				updated_entry.save()
 
 				if 'error' not in context:	
-					cover = None
-					if entry.cover_photo:
-						cover = {	
-							"image": entry.cover_photo,
-							"thumbnail": entry.cover_photo.get_thumbnail((600,400)),
-							"lightbox": entry.cover_photo.get_thumbnail((1024,600)),
-						}
+					cover, photos = self.gen_photos(entry)
 					context['cover'] = cover
-					
-					photos = [{ "image": photo } for photo in entry.alt_photos()]
-					for photo in photos:
-						photo["thumbnail"] = photo['image'].get_thumbnail((300,200))
-						photo["lightbox"] = photo['image'].get_thumbnail((1024,600))
 					context['photos'] = photos
 			else:
 				context['error'] = form.errors
@@ -349,12 +346,10 @@ class EntryView:
 			extra = 3
 			maxOrderNum = len(entry.photo_set.all())
 			PhotoInlineFormset = inlineformset_factory(Entry, Photo, form=EntryView.PhotoForm, extra=extra, can_order=True)
-			photos = PhotoInlineFormset(instance=entry)#, initial=[{'orderNum':maxOrderNum+i+1} for i in range(extra)])
+			photos = PhotoInlineFormset(instance=entry)
 			
-			thumbs = {}
-			for photo in entry.photo_set.all():
-				thumbs[photo.id] = photo.get_thumbnail((50,50))
+			preview_size = Photo.THUMB_SIZES['PREVIEW']
 			
-			return render_to_response("scrapbook/entry/edit.html", { "form": form, "photos": photos, "thumbs": thumbs }, context_instance=RequestContext(request))
+			return render_to_response("scrapbook/entry/edit.html", { "form": form, "photos": photos, "preview_size": preview_size }, context_instance=RequestContext(request))
 		
 		
