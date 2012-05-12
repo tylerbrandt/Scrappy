@@ -6,40 +6,33 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-from scrapbook.models import Entry, Photo, Book
+from scrapbook.models import Entry, Photo, Book, Checkin
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
-
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
 
 class EntryModelTest(TestCase):
 	def setUp(self):
 		self.owner = User.objects.create()
 		self.book = Book.objects.create(title="Test Book", owner=self.owner)
 
-	def test_first_entry_should_have_orderNum_1(self):
+	def test_first_entry_should_have_order_0(self):
 		entry = Entry(book=self.book)
 		entry.save()
-		self.assertEqual(entry.orderNum, 1)
+		self.assertEqual(entry._order, 0)
 
-	def test_second_entry_should_have_orderNum_2(self):
+	def test_second_entry_should_have_order_1(self):
 		entry1 = Entry(book=self.book)
 		entry2 = Entry(book=self.book)
 		entry1.save()
 		entry2.save()
-		self.assertEqual(entry2.orderNum, 2)
+		self.assertEqual(entry2._order, 1)
 
-	def test_10_entrys_should_have_orderNum_1_10(self):
+	def test_10_entrys_should_have_order_0_9(self):
 		entries = [Entry(book=self.book) for i in range(10)]
 		for i in range(len(entries)):
 			entry = entries[i]
 			entry.save()
-			self.assertEqual(entry.orderNum, i+1)
+			self.assertEqual(entry._order, i)
 
 	def test_promote_only_photo_to_cover(self):
 		entry = Entry(book=self.book)
@@ -83,21 +76,21 @@ class PhotoModelTest(TestCase):
 		self.book = Book.objects.create(title="Test Book", owner=self.owner)
 		self.entry = Entry.objects.create(title="Test Entry", description="Test Entry Desc", book=self.book)
 
-	def test_first_Photo_should_have_orderNum_1(self):
+	def test_first_Photo_should_have_order_0(self):
 		photo = Photo(entry=self.entry)
 		photo.save()
-		self.assertEqual(photo.orderNum, 1)
+		self.assertEqual(photo._order, 0)
 
-	def test_second_Photo_should_have_orderNum_2(self):
+	def test_second_Photo_should_have_order_1(self):
 		photo1 = Photo(entry=self.entry)
 		photo2 = Photo(entry=self.entry)
 		photo1.save()
 		photo2.save()
-		self.assertEqual(photo2.orderNum, 2)
+		self.assertEqual(photo2._order, 1)
 
-	def test_10_photos_should_have_orderNum_1_10(self):
+	def test_10_photos_should_have_order_0_9(self):
 		photos = [Photo(entry=self.entry) for i in range(10)]
 		for i in range(len(photos)):
 			photo = photos[i]
 			photo.save()
-			self.assertEqual(photo.orderNum, i+1)
+			self.assertEqual(photo._order, i)
