@@ -69,6 +69,10 @@ class EntryModelTest(TestCase):
 
 		self.assertEqual(entry.cover_photo, photo2)
 
+	def test_with_checkin_sets_date_to_checkin_date(self):
+		checkin = Checkin.objects.create(checkin_id='blah')
+		entry = Entry.objects.create(book=self.book, checkin=checkin)
+		self.assertEqual(entry.date, checkin.created_at)
 
 class PhotoModelTest(TestCase):
 	def setUp(self):

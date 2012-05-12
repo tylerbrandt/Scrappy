@@ -21,6 +21,8 @@ class Entry(models.Model):
 	description = models.TextField()
 	# Published Date
 	pub_date = models.DateTimeField('date published', default=timezone.now)
+	# Post Date
+	date = models.DateTimeField(null=True, blank=True)
 	# Checkin
 	checkin = models.ForeignKey('Checkin', null=True, blank=True, on_delete=models.SET_NULL)
 	# Book
@@ -36,8 +38,8 @@ class Entry(models.Model):
 		#unique_together = ('book','_order')
 
 	def save(self, *args, **kwargs):
-		#if self.orderNum is 0:
-		#	self.orderNum = len(Entry.objects.filter(book=self.book)) + 1
+		if self.checkin:
+			self.date = self.checkin.created_at
 
 		super(Entry, self).save(*args, **kwargs)
 
