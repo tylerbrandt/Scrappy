@@ -125,6 +125,15 @@ class BookView:
 						"lng": lng,
 						})
 
+				# Date
+				if entry["object"].date:
+					date = entry["object"].date
+					entry["date"] = json.dumps({
+						'year': date.year,
+						'month': date.month,
+						'day': date.day
+					})
+
 				# show actions?
 				actions = request.user == book.owner
 			
@@ -173,7 +182,7 @@ class EntryView:
 	class EntryForm(ModelForm):		
 		class Meta:
 			model = Entry
-			fields = ('title','description','checkin')
+			fields = ('title','date','description','checkin')
 		
 		def __init__(self, *args, **kwargs):	
 			request = kwargs.pop('request', None)
@@ -217,28 +226,16 @@ class EntryView:
 
 				
 				photos = PhotoInlineFormset(request.POST, request.FILES, instance=entry)
-				#photo_order = [0 for photo_form in photos]
 				for photo_form in photos:
 					if photo_form.is_valid():
 						photo = photo_form.save(commit=False)
 						if photo.image:
-							#print "Saving: %s" % photo.image
-
-							#order = photo_form.cleaned_data['ORDER'] - 1
-							#print "Order: %s" % order
-
-							#photo_order[order] = photo.pk
 							photo.save()
 						else:
 							print "Photo with no image! horror!"
 					else:
 						pass
 
-				#entry.set_photo_order(photo_order)
-
-				#if realErrors:
-				#	return render_to_response("scrapbook/entry/edit.html", { "form": form, "photos": photos, "error": photos.errors }, context_instance=RequestContext(request))
-				#else:
 				return HttpResponseRedirect(reverse('entry_detail', kwargs={ 'pk': entry.id }))
 			else:
 				print "Error: %s" % form.errors

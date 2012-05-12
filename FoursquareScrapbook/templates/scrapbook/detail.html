@@ -3,14 +3,16 @@
 {% block title %}{{ book }}{% endblock %}
 
 {% block content %}
-<header>
+<header class="header">
 <h1>{{ book }}</h1>
 <p class="subheader">{{ book.entry_set.all.count }} entries</p>
 {% if actions %}
 <a class="action" href="./edit">Edit</a>
 {% endif %}
 </header>
+{% if book.image %}
 <img src="{{ book.image.url }}" />
+{% endif %}
 
 {% if book.geo %}
 <section class="map">
@@ -22,16 +24,19 @@
 </section>
 {% endif %}
 
+<header class="book_header">
+	<h2>Entries</h2>
+	{% if actions %}
+	<a class="action" href="./entries/new/">New</a>
+	{% endif %}
+	
+</header>
+
 <section class="book_entries">
 {% load thumbnail %}
-<header>
-<h2>Entries</h2>
-{% if actions %}
-<a class="action" href="./entries/new/">New</a>
-{% endif %}
-</header>
+
 {% for entry in entries %}
-<article id="entry_{{ forloop.counter }}" class="book_entry">
+<article id="entry_{{ forloop.counter }}" class="book_entry" data-date="{{ entry.date }}">
 	<header>
 		<h3><a href="{% url entry_detail pk=entry.object.id %}">{{ entry.object }}</a></h3>
 		{% if entry.object.checkin %}
@@ -54,6 +59,11 @@
 </article>
 {% endfor %}
 </section>
+<nav class="entry_date">
+	<a class="all" href="#">All</a>
+	{% load custom_tags %}
+	{{ book.get_entries_by_date|nav_ul }}
+</nav>
 {% endblock content %}
 
 {% block scripts %}
@@ -62,4 +72,6 @@
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
 <script src="/media/js/map.js"></script>
 {% endif %}
+
+<script src="/media/js/entry_date.js"></script>
 {% endblock %}

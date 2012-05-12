@@ -13,6 +13,29 @@ class Book(models.Model):
 	def __unicode__(self):
 		return self.title
 
+	def dict_to_list(self, d):
+		if type(d) == list:
+			return d
+		l = []
+		for key in d:
+			l.append(key)
+			l.append(self.dict_to_list(d[key]))
+		return l
+
+	def get_entries_by_date(self):
+		from datetime import datetime
+		from collections import defaultdict
+		# create a 3-level dictionary for y-m-d->[list of entries]
+		dateDict = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+		for entry in self.entry_set.exclude(date=None).order_by('date'):
+			date = entry.date
+			if date:
+				dateDict[date.year][date.month][date.day].append(entry)
+			else:
+				dateDict['No Date'][entry.id] = entry
+		return dateDict
+		#return self.dict_to_list(dateDict)
+
 class Entry(models.Model):
 	"""Model for entries in the journal. Usually based around a checkin/venue"""
 	# Title
@@ -47,11 +70,9 @@ class Entry(models.Model):
 		return self.title
 		
 	def alt_photos(self):
-		"""Return Photos for current Entry that are not the Cover Photo ordered by orderNum"""
+		"""Return Photos for current Entry that are not the Cover Photo"""
 		cover_photo_id = self.cover_photo and self.cover_photo.id or None
-		return self.photo_set.exclude(id=cover_photo_id).all()
-
-	
+		return self.photo_set.exclude(id=cover_photo_id).all()	
 
 class Checkin(models.Model):
 	"""Model for Foursquare Checkins"""
@@ -108,8 +129,9 @@ class Photo(models.Model):
 		super(Photo, self).save(*args, **kwargs)
 
 		# precompute thumbnails
-		for size, sizeString in self.THUMB_SIZES.iteritems():
-			get_thumbnail(self.image, sizeString)
+		if self.image:
+			for size, sizeString in self.THUMB_SIZES.iteritems():
+				get_thumbnail(self.image, sizeString)
 
 		# set cover
 		if not self.entry.cover_photo:

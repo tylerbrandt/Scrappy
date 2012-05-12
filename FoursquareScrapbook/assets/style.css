@@ -1,8 +1,8 @@
 body {
 	font-family: sans-serif;
 	width: 100%;
-	background: #444;
 	color: white;
+	background: #444;
 }
 
 body > header {
@@ -41,7 +41,7 @@ h3 {
 	font-size: 14pt;
 }
 
-nav ul {
+header > nav ul {
 	position: static;
 	padding: 0;
 }
@@ -51,7 +51,7 @@ nav ul {
 	background-color: pink;
 }
 
-nav li {
+body > header nav li {
 	display: inline;
 	list-style: none;
 	margin-right: 10px;
@@ -76,6 +76,7 @@ li.user_info {
 	top: 95px;
 	width: 100%;
 	margin-left: 10px;
+	background: #555;
 }
 
 .book_list {
@@ -94,6 +95,16 @@ li.user_info {
 
 h1, h2, h3 {
 	text-shadow: #555 2px -2px 2px;
+}
+
+.entry_date {
+	float: right;
+	width: 20%;
+}
+
+.entry_date li {
+	margin-left: 15px;
+	display: block;
 }
 
 .entry_detail h2 {
@@ -149,10 +160,14 @@ table.form td.sort_handle {
 	padding: 0;
 }
 
+.map {
+	padding: 30px 0;
+}
+
 .map_wrapper {
 	width: 90%;
 	height: 400px;
-	margin: 30px auto;
+	margin: auto;
 	position: relative;
 	border: 8px solid #FBF8EF;
 }
@@ -189,11 +204,20 @@ table.form td.sort_handle {
 	background-size: 196px;
 }
 
+.header, .map, .book_entries, .book_header {
+	background: #444;
+}
+
+.book_entries {
+	float: left;
+	width: 80%;
+}
+
 .book_entries article {
 	border-top: 1px dotted white;
-	clear: both;
 	padding: 20px 0;
 	margin: 0 20px;
+	clear: left;
 }
 
 .content > header, .book_entries > header {
@@ -203,6 +227,10 @@ table.form td.sort_handle {
 .book_entries article header {
 	margin-bottom: 20px;
 	padding-left: 10px;
+}
+
+.footer {
+	clear: both;
 }
 
 .body {
