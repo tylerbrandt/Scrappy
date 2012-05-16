@@ -12,7 +12,7 @@ body > header {
 	width: 100%;
 	background: black;
 	color: white;
-	z-index: 99;
+	z-index: 2;
 	padding: 10px;
 	
 }
@@ -329,4 +329,28 @@ img.preview {
 
 #debuginfo {
 	background-color: yellow;
+}
+
+#media {
+	position: fixed;
+	z-index: 3;
+	left: 200px;
+}
+
+@media screen and (min-width: 900px) {
+	#media:after {
+		content: "Desktop";
+	}
+}
+
+@media screen and (max-device-width: 480px) {
+	#media:after {
+		content: "iPhone";
+	}
+}
+
+@media screen and (max-device-width: 1024px); {
+	#media:after {
+		content: "iPad";
+	}
 }
