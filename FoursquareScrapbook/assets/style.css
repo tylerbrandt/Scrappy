@@ -10,7 +10,7 @@ body > header {
 	top: 0;
 	left: 0;
 	width: 100%;
-	background: orange;
+	background: black;
 	color: white;
 	z-index: 2;
 	padding: 10px;
@@ -349,7 +349,7 @@ img.preview {
 	}
 }
 
-@media screen and (max-device-width: 1024px); {
+@media screen and (max-device-width: 1024px) {
 	#media:after {
 		content: "iPad";
 	}
