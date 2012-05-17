@@ -3,6 +3,14 @@
 {% block title %}{{ book }}{% endblock %}
 
 {% block content %}
+<div class="sidebar">
+	<nav class="entry_date">
+		<a class="all" href="#">All</a>
+		{% load custom_tags %}
+		{{ book.get_entries_by_date|nav_ul }}
+	</nav>
+</div>
+<div class="main_content">
 <header class="header">
 <h1>{{ book }}</h1>
 <p class="subheader">{{ book.entry_set.all.count }} entries</p>
@@ -59,14 +67,12 @@
 </article>
 {% endfor %}
 </section>
-<nav class="entry_date">
-	<a class="all" href="#">All</a>
-	{% load custom_tags %}
-	{{ book.get_entries_by_date|nav_ul }}
-</nav>
+</div>
 {% endblock content %}
 
 {% block scripts %}
+<script type="text/javascript" src="/media/js/nav.js"></script>
+
 {% if book.geo %}
 <!-- Google maps API -->
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 

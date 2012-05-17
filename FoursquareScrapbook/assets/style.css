@@ -75,8 +75,13 @@ li.user_info {
 	position: absolute;		
 	top: 95px;
 	width: 100%;
-	margin-left: 10px;
-	background: #555;
+	height: 100%;
+	background-color: #555;
+}
+
+.main_content {
+	background-color: #444;
+	padding: 10px;
 }
 
 .book_list {
@@ -97,14 +102,14 @@ h1, h2, h3 {
 	text-shadow: #555 2px -2px 2px;
 }
 
-.entry_date {
-	float: right;
-	width: 20%;
+.entry_date ul {
+	padding: 10px 0;
 }
 
-.entry_date li {
-	margin-left: 15px;
+.entry_date li, .entry_date a.all {
+	margin: 10px 0 10px 10px;
 	display: block;
+	font-size: 20px;
 }
 
 .entry_detail h2 {
@@ -204,20 +209,16 @@ table.form td.sort_handle {
 	background-size: 196px;
 }
 
-.header, .map, .book_entries, .book_header {
-	background: #444;
-}
-
+/*
 .book_entries {
 	float: left;
-	width: 80%;
 }
+*/
 
 .book_entries article {
 	border-top: 1px dotted white;
 	padding: 20px 0;
-	margin: 0 20px;
-	clear: left;
+	/* clear: left; */
 }
 
 .content > header, .book_entries > header {
@@ -337,20 +338,48 @@ img.preview {
 	left: 200px;
 }
 
-@media screen and (min-width: 900px) {
+/* 
+@media screen and (min-width: 601px) {
 	#media:after {
 		content: "Desktop";
 	}
-}
 
-@media screen and (max-device-width: 480px) {
+	.sidebar {
+		float: left;
+		width: 15%;
+		display: none;
+	}
+
+	.main_content {
+		float: left;
+		width: 85%;
+		overflow: hidden;
+	}
+}
+*/
+
+@media screen and (max-device-width: 480px), screen and (max-width: 600px) {
 	#media:after {
-		content: "iPhone";
+		content: "Phone";
 	}
 }
 
-@media screen and (max-device-width: 1024px) {
+@media screen and (max-device-width: 1024px), screen and (min-width: 601px) {
 	#media:after {
-		content: "iPad";
+		content: "Tablet";
+	}
+
+	.sidebar {
+		position: fixed;
+		width: 200px;
+		height: 800px;
+		display: none;
+		background: inherit;
+	}
+
+	.main_content {
+		position: absolute;
+		width: 1024px;
+		overflow: hidden;
 	}
 }
