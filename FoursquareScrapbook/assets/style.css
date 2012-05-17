@@ -94,7 +94,7 @@ li.user_info {
 }
 
 .main_content_menu input {
-	font-size: 30px;
+	font-size: 20px;
 }
 
 .main {
@@ -403,5 +403,6 @@ img.preview {
 		left: 0;
 		width: 1024px;
 		overflow: hidden;
+		-webkit-transition: left 0.5s ease-out;
 	}
 }

@@ -4,9 +4,9 @@ $(document).ready(function() {
 
 		if(parseInt(content_pos, 10) === 0) {
 			left = $(".sidebar").css('width');
-			$(".main_content").animate({ 'left': left });
+			$(".main_content").css({ 'left': left });
 		} else {
-			$(".main_content").animate({ 'left': '0' });
+			$(".main_content").css({ 'left': '0' });
 		}
 		
 	});
