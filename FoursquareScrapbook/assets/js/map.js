@@ -35,17 +35,29 @@ $(document).ready(function() {
 	}
 
 	function addPostMarkers(map,locs) {
-    	var i,len;
+    	var i, len, latlng, latlngs = [];
     	for(i = 0, len=locs.length; i < locs.length; i++) {
     		var loc=locs[i],
+    			latlng = new google.maps.LatLng(loc.lat, loc.lng),
     			marker = new google.maps.Marker({
-					position: new google.maps.LatLng(loc.lat, loc.lng),
+					position: latlng,
 					map: map,
 					title: loc.title
 				});
 
 				google.maps.event.addListener(marker, 'click', jumpToArticle(loc));
+
+				latlngs.push(latlng);
     	}
+
+    	var path = new google.maps.Polyline({
+    		path: latlngs,
+    		strokeColor: "blue",
+    		strokeOpacity: 0.5,
+    		strokeWeight: 4.0
+    	});
+
+    	path.setMap(map);
     }
 
 	function init() {
