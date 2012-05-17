@@ -1,6 +1,7 @@
 from django import template
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
+import calendar
 
 register = template.Library()
 
@@ -21,7 +22,11 @@ def nav_ul(l, nesting=0, autoescape=None):
 		# convert the dictionary-like object into a ul
 		s = '<ul>'
 		for key, value in l.iteritems():
-			s += '<li><a class="%s" href="#nav_%s">%s</a>%s</li>' % (nesting_level[nesting], esc(key), esc(key), nav_ul(value, nesting=nesting+1))
+			label = nesting_level[nesting]
+			dispVal = esc(key)
+			if label == 'month':
+				dispVal = calendar.month_name[key]
+			s += '<li><a class="%s" href="#nav_%s_%s">%s</a>%s</li>' % (label, label, esc(key), dispVal, nav_ul(value, nesting=nesting+1))
 		s += '</ul>'
 
 	# Ignore non-dictionary results

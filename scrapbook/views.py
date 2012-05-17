@@ -18,6 +18,8 @@ from PIL import Image
 import os.path
 from FoursquareScrapbook import settings
 
+import datetime
+
 import json
 
 def root(request):
@@ -100,6 +102,7 @@ class BookView:
 			book = get_object_or_404(Book, pk=pk)
 			
 			entries = [{ "object": entry } for entry in book.entry_set.all()]#order_by("orderNum")]
+			dateEntry = {}
 			snippet_length = 1200
 			for entry in entries:
 				# Cover
@@ -126,18 +129,35 @@ class BookView:
 						})
 
 				# Date
+				d = None
 				if entry["object"].date:
-					date = entry["object"].date
-					entry["date"] = json.dumps({
-						'year': date.year,
-						'month': date.month,
-						'day': date.day
-					})
+					dt = entry["object"].date
+					d = datetime.date(dt.year, dt.month, dt.day)
+					#dateString = date.strftime("%A, %B %d, %Y")
+
+				if d in dateEntry:
+					dateEntry[d].append(entry)
+				else:
+					dateEntry[d] = [entry]
 
 				# show actions?
 				actions = request.user == book.owner
 			
-			return render_to_response("scrapbook/detail.html", { "book": book, "entries": entries, "actions": actions }, context_instance=RequestContext(request))
+			# order dates
+			#print dateEntry
+			datedEntries = []
+			for date in sorted(dateEntry.keys(), key=lambda d: d or datetime.date(datetime.MAXYEAR, 12, 31)):
+				dateString = date and date.strftime("%A, %B %d, %Y") or "No Date"
+				JSONDate = date and json.dumps({
+						'year': date.year,
+						'month': date.month,
+						'day': date.day
+					}) or ""
+				datedEntries.append({ "dateString": dateString, "date": JSONDate, "entries": dateEntry[date] })
+
+			#print datedEntries
+
+			return render_to_response("scrapbook/detail.html", { "book": book, "dateEntry": datedEntries, "actions": actions }, context_instance=RequestContext(request))
 
 		@method_decorator(login_required)
 		def post(self, request, pk):

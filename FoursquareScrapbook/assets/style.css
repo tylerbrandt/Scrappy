@@ -87,6 +87,7 @@ li.user_info {
 .main_content_menu {
 	position: fixed;
 	width: 100%;
+	height: 30px;
 	background: #333;
 	padding: 0;
 	z-index: 2;
@@ -98,7 +99,7 @@ li.user_info {
 }
 
 .main {
-	padding: 40px 10px 10px 10px;
+	padding: 60px 10px 10px 10px;
 }
 
 .book_list {
@@ -353,31 +354,38 @@ img.preview {
 	background-color: yellow;
 }
 
+.sidebar {
+	position: fixed;
+	height: 800px;
+	width: 200px;
+	background: inherit;
+}
+
 #media {
 	position: fixed;
 	z-index: 3;
 	left: 200px;
+	display: none;
 }
 
-/* 
-@media screen and (min-width: 601px) {
+@media screen and (min-width: 1025px) {
 	#media:after {
 		content: "Desktop";
 	}
 
-	.sidebar {
-		float: left;
-		width: 15%;
+	.main_content_menu {
 		display: none;
 	}
 
 	.main_content {
-		float: left;
-		width: 85%;
-		overflow: hidden;
+		position: absolute;
+		left: 200px;
+	}
+
+	.main {
+		padding-top: 20px;
 	}
 }
-*/
 
 @media screen and (max-device-width: 480px), screen and (max-width: 600px) {
 	#media:after {
@@ -385,7 +393,7 @@ img.preview {
 	}
 }
 
-@media screen and (max-device-width: 1024px), screen and (min-width: 601px) {
+@media screen and (max-device-width: 1024px), screen and (max-width: 1024px) {
 	#media:after {
 		content: "Tablet";
 	}
@@ -403,6 +411,6 @@ img.preview {
 		left: 0;
 		width: 1024px;
 		overflow: hidden;
-		-webkit-transition: left 0.5s ease-out;
+		/* -webkit-transition: left 0.5s ease-out; */
 	}
 }

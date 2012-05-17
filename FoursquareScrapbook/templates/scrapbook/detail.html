@@ -46,10 +46,13 @@
 <section class="book_entries">
 {% load thumbnail %}
 
-{% for entry in entries %}
-<article id="entry_{{ forloop.counter }}" class="book_entry" data-date="{{ entry.date }}">
+{% for datedEntry in dateEntry %}
+<section class="dated_entries" data-date="{{ datedEntry.date }}">
+<h3 class="date">{{ datedEntry.dateString }}</h3>
+{% for entry in datedEntry.entries %}
+<article id="entry_{{ forloop.counter }}" class="book_entry">
 	<header>
-		<h3><a href="{% url entry_detail pk=entry.object.id %}">{{ entry.object }}</a></h3>
+		<h4><a href="{% url entry_detail pk=entry.object.id %}">{{ entry.object }}</a></h4>
 		{% if entry.object.checkin %}
 		<p class="checkin" data-geo="{{ entry.location }}">
 			<span class='title'>{{ entry.object.checkin }}</span>
@@ -68,6 +71,8 @@
 		</div>
 	</section>
 </article>
+{% endfor %}
+</section>
 {% endfor %}
 </section>
 </div>

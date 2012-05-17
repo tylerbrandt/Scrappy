@@ -1,16 +1,17 @@
 $(document).ready(function() {
 	$('.entry_date').on('click', '.all', function() {
-		$('.book_entry').each(function() {
+		$('.dated_entries').each(function() {
 			$(this).show();
 		});
 	});
 
 	$('.entry_date').on('click', 'li a', function() {
 		var type = $(this).attr('class'),
-			target = $(this).text();
+			target = $(this).attr('href').replace('#nav_' + type + '_','');
 		if (type) {
-			$('.book_entry').each(function() {
-				var timestamp = '' + $(this).data('date')[type];
+			$('.dated_entries').each(function() {
+				var data = $(this).data('date'),
+					timestamp = '' + data[type];
 				if(timestamp !== target) {
 					$(this).hide();
 				} else {
