@@ -1,15 +1,13 @@
 $(document).ready(function() {
 	$("#show_sidebar").on('click', function() {
-		var left;
+		var left, content_pos = $(".main_content").css("left");
 
-		$(".sidebar").toggle("fast",function() {
-			if($(".sidebar").is(":visible")) {
-				left = $(".sidebar").width();
-				$(".main_content").css('left',left);
-			} else {
-				$(".main_content").css('left','0');
-			}
-		});
+		if(parseInt(content_pos, 10) === 0) {
+			left = $(".sidebar").css('width');
+			$(".main_content").animate({ 'left': left });
+		} else {
+			$(".main_content").animate({ 'left': '0' });
+		}
 		
 	});
 });

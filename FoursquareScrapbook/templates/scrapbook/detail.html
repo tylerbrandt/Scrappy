@@ -11,7 +11,10 @@
 	</nav>
 </div>
 <div class="main_content">
+	<div class="main_content_menu"><input type="button" id="show_sidebar" value="NAV"/></div>
+	<div class="main">
 <header class="header">
+	
 <h1>{{ book }}</h1>
 <p class="subheader">{{ book.entry_set.all.count }} entries</p>
 {% if actions %}
@@ -67,6 +70,7 @@
 </article>
 {% endfor %}
 </section>
+</div>
 </div>
 {% endblock content %}
 
