@@ -139,6 +139,8 @@ INSTALLED_APPS = (
     'storages',
     # magic thumbnails
     'sorl.thumbnail',
+    # production webserver
+    'gunicorn',
 )
 
 # A sample logging configuration. The only tangible logging
